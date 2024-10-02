@@ -1,0 +1,157 @@
+{% extends 'app/base2.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .clientDetails{}
+    .clientDetails .top {
+        background: var(--color-white);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .clientDetails .top h4{
+        font-size: 30px;
+        color: var(--color-gray-dark);
+    }
+    .clientDetails .top h5{
+        font-size: 24px;
+        color: var(--color-gray-light);
+    }
+    .clientDetails .top .line{
+        height: 1px;
+        width: 95%;
+        background: var(--color-gray-light);
+    }
+    .clientDetails .subtop {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        background: var(--color-white);
+    }
+    .clientDetails .subtop div {
+        padding: 20px;
+    }
+    .clientDetails .subtop h6{
+        font-size: 16px;
+        color: var(--color-gray-dark);
+    }
+    .clientDetails .subtop p{
+        font-size: 13px;
+        color: var(--color-gray-light);
+    }
+
+
+    .cards{
+        margin-top: 20px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    .cards .card {
+        background: var(--color-white);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .cards .card .left h5{
+        font-size: 20px;
+        color: var(--color-gray-dark);
+        padding: 20px;
+    }
+    .cards .card .left h6{
+        font-size: 15px;
+        color: var(--color-gray-light);
+        padding: 0 20px 20px 20px;
+    }
+    .cards .card .right{
+        margin-right: 20px;
+        cursor: pointer;
+    }
+
+    /* Progress */
+    .progress-container {
+            width: 500px;
+            background-color: #f3f3f3;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 0 20px 20px;
+        }
+
+        .progress-bar {
+            width: 50%;
+            height: 20px;
+            background: var(--color-primary);
+            text-align: center;
+            line-height: 20px;
+            color: white;
+        }
+    /* MEDIA QUERY FOR MOBILE PHONE */
+    @media screen and (max-width: 700px) {
+        .clientDetails .subtop {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .cards{
+            grid-template-columns: 1fr;
+            margin: 0 2px 0 2px;
+        }
+        /* Progress */
+        .progress-container {
+            width: 300px;
+        }
+    }
+</style>
+<section class="clientDetails">
+
+    <div class="top">
+        <h4>{{client.clientName}}</h4>
+        <h5>{{client.address}}</h5>
+        <div class="line"></div>
+    </div>
+
+    <div class="subtop">
+        <div>
+            <h6>Representative name:</h6>
+            <p>{{client.representativeName}}</p>
+        </div>
+        <div>
+            <h6>Role:</h6>
+            <p>{{client.representativeTitle}}</p>
+        </div>
+        <div>
+            <h6>Email:</h6>
+            <p>{{client.email}}</p>
+        </div>
+        <div>
+            <h6>Phone:</h6>
+            <p>{{client.phone}}</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="cards">
+
+            {% for item in projects_with_performance %}
+            <div class="card">
+                <a href="{% url 'projectDetails' item.project.id %}">
+                    <div class="left">
+                        <h5>{{ item.project.title }}</h5>
+                        <div class="progress-container">
+                            <div class="progress-bar" style=" width: {{ item.performance }}%;">{{ item.performance }}%</div>
+                        </div>
+                    </div>
+                </a>
+                
+                <div class="right" id="openModalPersonal">
+                    <span class="material-icons-sharp">edit</span>
+                </div>
+            </div>
+            {% endfor %}
+
+            
+        </div>
+    </div>
+</section>
+
+{% endblock %}

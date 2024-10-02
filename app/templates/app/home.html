@@ -1,0 +1,476 @@
+{% extends 'app/base2.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+
+<style>
+    .home{
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+        gap: 10px;
+    }
+    .home .left{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .home .left .projects{
+        display: flex;
+        flex-direction: column;
+        background: var(--color-white);
+        border-radius: 10px;
+    }
+    .home .left .projects h4{
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--color-dark);
+        padding: 10px 0px 0px 20px;
+    }
+    .home .left .projects .row{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
+        gap: 5px;
+        padding: 0px 10px 10px 20px;
+    }
+    .home .left .projects .row .card{
+        background: var(--color-white);
+        border: 1px solid var(--color-primary);
+        border-radius: 10px;
+        padding: 10px;
+    }
+    .home .left .projects .row .card h5{
+        font-size: 25px;
+        font-weight: 600;
+        color: var(--color-dark);
+    }
+    .home .left .projects .row .card h6{
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--color-gray-dark);
+    }
+    .home .left .projects .row .card section{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .home .left .projects .row .card section p,
+    .home .left .projects .row .card p{
+        font-size: 12px;
+        font-weight: 300;
+        color: var(--color-gray-light);
+    }
+
+    /* Progress */
+    .progress-container {
+            width: 90%;
+            background-color: #f3f3f3;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 0 20px 20px;
+        }
+
+        .progress-bar {
+            width: 50%;
+            height: 15px;
+            background: var(--color-primary);
+            text-align: center;
+            line-height: 20px;
+            color: white;
+            font-size: 10px;
+        }
+        .home .left .revenue{
+            background: var(--color-white);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .home .left .revenue h4,
+        .home .right .leaves h4,
+        .home .right .clients h4{
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-dark);
+        }
+        .home .left .revenue .numbers{
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+            padding: 0px 10px 10px 0px;
+        }
+        .home .left .revenue .numbers div h5,
+        .home .right .clients .row h5{
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--color-gray-dark);
+        }
+        .home .left .revenue .numbers div h6,
+        .home .right .clients .row h6{
+            font-size: 12px;
+            font-weight: 300;
+            color: var(--color-gray-dark);
+        }
+        .home .right {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .home .right .leaves{
+            background: var(--color-white);
+            border-radius: 10px;
+            padding: 10px;
+        }
+        .home .right .leaves div{
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            align-items: center;
+        }
+        .home .right .leaves div .list{
+            display: flex;
+            flex-direction: column;
+            text-align: start;
+        }
+        .home .right .leaves div .list div{
+            display: flex;
+            justify-content: space-between;
+        }
+        .home .right .leaves div .list div p{
+            font-size: 13px;
+            font-weight: 300;
+            color: var(--color-gray-light);
+        }
+        .home .right .leaves div .list div section{
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--color-gray-dark);
+        }
+        .home .right .clients{
+            background: var(--color-white);
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .home .right .clients .row{
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .home .right .clients .list{
+            margin-top: 5px;
+        }
+        .home .right .clients .list h5{
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--color-gray-dark);
+            margin-top: 20px;
+        }
+        .home .right .clients .list table{
+            width: 100%;
+        }
+        .home .right .clients .list table tr{
+            padding: 2px 0px 0px 2px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px;
+        }
+        .home .right .clients .list table tr:hover{
+            background: var(--color-light);
+        }
+        .home .right .clients .list table tr th{
+            font-size: 14px;
+            text-align: start;
+
+        }
+        .home .right .clients .list table tr td{
+            font-size: 12px;
+            text-align: start;
+        }
+        @media screen and (max-width: 700px) {
+            .home {
+                grid-template-columns: 1fr;
+            }
+            .home .left .projects .row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .home .left .revenue .numbers {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+</style>
+
+<section class="home">
+    <div class="left">
+        <div class="projects">
+            <h4>Projects</h4>
+            <div class="row">
+                <div class="card">
+                    <h5>{{total_projects}}</h5>
+                    <h6>Total</h6>
+                    <h6>Projects</h6>
+                </div>
+                <div class="card">
+                    <h5>{{uncompleted_project}}</h5>
+                    <h6>Ongoing</h6>
+                    <h6>Projects</h6>
+                </div>
+                <div class="card">
+                    <h5>{{overdue_projects}}</h5>
+                    <h6>Overdue</h6>
+                    <h6>Projects</h6>
+                </div>
+                <div class="card">
+                    <h5>{{completed_project}}</h5>
+                    <h6>Completed</h6>
+                    <h6>Projects</h6>
+                </div>
+                <div class="card">
+                    <h6>Upcoming Deadline</h6>
+
+                    {% for i in upcoming_projects %}
+                    <section>
+                        <p>{{i.title}} - {{i.endDate}}</p>
+                        <!-- <div class="progress-container">
+                            <div class="progress-bar" style=" width: {{i.performance}}%;">{{i.performance}}</div>
+                        </div> -->
+                    </section>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- CHART -->
+            <canvas id="chart" style="height: 400px;"></canvas>
+        </div>
+
+        
+        {% if user|is_in_group:"finance" or user|is_in_group:"directors" or user|is_in_group:"hr" %}
+        <div class="revenue">
+            <h4>Revenue</h4>
+            <div class="numbers">
+                <div>
+                    <h5>{{total_invoice_this_month}}</h5>
+                    <h6>This Month</h6>
+                </div>
+                <div>
+                    <h5>{{total_invoice_last_month}}</h5>
+                    <h6>Last Month</h6>
+                </div>
+                <div>
+                    <h5>{{total_invoice_this_year}}</h5>
+                    <h6>This Year</h6>
+                </div>
+                <div>
+                    <h5>{{total_invoice_last_year}}</h5>
+                    <h6>Last Year</h6>
+                </div>
+                <div>
+                    <h5>{{total_invoice_overall}}</h5>
+                    <h6>Total</h6>
+                </div>
+            </div>
+            <div class="graph"></div>
+        </div>
+        {% endif %}
+
+        <div class="projects">
+            <h4>Tasks Assignments</h4>
+            <div class="row">
+                <div class="card">
+                    <h5>{{total_task}}</h5>
+                    <h6>Total</h6>
+                    <h6>Tasks</h6>
+                </div>
+                <div class="card">
+                    <h5>{{assignments_this_year}}</h5>
+                    <h6>This Year</h6>
+                    <h6>Tasks</h6>
+                </div>
+                <div class="card">
+                    <h5>{{assignments_this_month}}</h5>
+                    <h6>This Month</h6>
+                    <h6>Tasks</h6>
+                </div>
+                <div class="card">
+                    <h5>{{assignments_this_week}}</h5>
+                    <h6>This Week</h6>
+                    <h6>Tasks</h6>
+                </div>
+                <div class="card">
+                    <h6>Due Today [3]</h6>
+                    {% for i in assignments_due_today %}
+                    <p>{{i.assigned_to}} - {{i.description}}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="right">
+        <!-- <div class="leaves">
+            <h4>Website Status:</h4>
+            <h6>{{website_status}}</h6>
+        </div> -->
+
+        <div class="clients">
+            <h4>Employees</h4>
+            <div class="row">
+                <div>
+                    <h5>{{total_employee}}</h5>
+                    <h6>Total Employees</h6>
+                </div>
+                <div>
+                    <h5>0</h5>
+                    <h6>Leave Employee</h6>
+                </div>
+            </div>
+            <div class="list">
+                <h5>Ending Contract Employee</h5>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Remain Months</th>
+                    </tr>
+                    {% for i in employees %}
+                    <tr>
+                        <td>{{ i.first_name }} {{i.last_name}}</td>
+                        <td>{{ i.remainDuration }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="leaves">
+            <h4>Leaves</h4>
+            <div>
+                <div id="grap">
+                    <canvas id="chart2" style="height: 50px;"></canvas>
+                </div>
+                <div class="list">
+                    <div>
+                        <p>Pending:</p>
+                        <section>{{pending_leaves}}</section>
+                    </div>
+                    <div>
+                        <p>Approved:</p>
+                        <section>{{approved_leaves}}</section>
+                    </div>
+                    <div>
+                        <p>Total:</p>
+                        <section>{{total_leaves}}</section>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clients">
+            <h4>Clients</h4>
+            <div class="row">
+                <div>
+                    <h5>{{clients_this_year}}</h5>
+                    <h6>New Client / Year</h6>
+                </div>
+                <div>
+                    <h5>{{total_clients}}</h5>
+                    <h6>Total Client</h6>
+                </div>
+            </div>
+            <div class="list">
+                <h5>Top Client by Revenue</h5>
+                <table>
+                    <tr>
+                        <th>Client</th>
+                        <th>No. Project</th>
+                    </tr>
+                    {% for i in top_clients %}
+                    <tr>
+                        <td>{{ i.clientName }}</td>
+                        <td>{{ i.project_count }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="clients">
+            <h4>Employees</h4>
+            <div class="row">
+                <div>
+                    <h5>{{total_employee}}</h5>
+                    <h6>Total Employee</h6>
+                </div>
+                <div>
+                    <h5>0</h5>
+                    <h6>Leave Employee</h6>
+                </div>
+            </div>
+            
+        </div>
+        <div class="employees">
+            
+        </div>
+    </div>
+    
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js" integrity="sha512-GMGzUEevhWh8Tc/njS0bDpwgxdCJLQBWG3Z2Ct+JGOpVnEmjvNx6ts4v6A2XJf1HOrtOsfhv3hBKpK9kE5z8AQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+
+const chart = document.querySelector("#chart").getContext('2d');
+const chart2 = document.querySelector("#chart2").getContext('2d');
+
+// create a new chart instance
+new Chart(chart, {
+    type: 'line',
+    data: {
+        labels: ['Jan', 'Feb', 'March', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [
+            {
+                label: 'Projects This Year',
+                data: [{{ monthly_projects_this_year.0.1 }}, {{ monthly_projects_this_year.1.1 }},
+                       {{ monthly_projects_this_year.2.1 }}, {{ monthly_projects_this_year.3.1 }},
+                       {{ monthly_projects_this_year.4.1 }}, {{ monthly_projects_this_year.5.1 }},
+                       {{ monthly_projects_this_year.6.1 }}, {{ monthly_projects_this_year.7.1 }},
+                       {{ monthly_projects_this_year.8.1 }}, {{ monthly_projects_this_year.9.1 }},
+                       {{ monthly_projects_this_year.10.1 }}, {{ monthly_projects_this_year.11.1 }}],
+                borderColor: 'rgb(255, 205, 86)',
+                borderWidth: 2
+            },
+            {
+                label: 'Projects Last Year',
+                data: [{{ monthly_projects_last_year.0.1 }}, {{ monthly_projects_last_year.1.1 }},
+                       {{ monthly_projects_last_year.2.1 }}, {{ monthly_projects_last_year.3.1 }},
+                       {{ monthly_projects_last_year.4.1 }}, {{ monthly_projects_last_year.5.1 }},
+                       {{ monthly_projects_last_year.6.1 }}, {{ monthly_projects_last_year.7.1 }},
+                       {{ monthly_projects_last_year.8.1 }}, {{ monthly_projects_last_year.9.1 }},
+                       {{ monthly_projects_last_year.10.1 }}, {{ monthly_projects_last_year.11.1 }}],
+                borderColor: 'rgb(54, 162, 235)',
+                borderWidth: 2
+            }
+        ]
+    },
+    options: {
+        responsive: true
+    }
+});
+
+// create a new chart instance
+new Chart(chart2, {
+    type: 'doughnut',
+    data: {
+        
+
+        datasets: [
+            {
+                
+                data: [{{pending_leaves}},{{approved_leaves}},{{total_leaves}}],
+                borderWidth: 2,
+                backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)'
+                ],
+            }
+        ]
+    },
+    options: {
+        responsive: true
+    }
+})
+</script>
+</section>
+
+{% endblock %}

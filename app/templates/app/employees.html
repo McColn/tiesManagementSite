@@ -1,0 +1,111 @@
+{% extends 'app/base2.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    
+    .employees .top{
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        align-items: center;
+        justify-content: center;
+    }
+    .employees .top h1 {
+        font-size: 24px;
+        cursor: pointer;
+    }
+    .cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+    }
+    .employees .cards .card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 10px 40px;
+        border-radius: 10px;
+        margin-top: 20px;
+        background: #fff;
+        box-shadow: 0 2rem 3rem var(--color-light);
+        transition: all 300ms ease;
+    }
+    .employees .cards .card .option {
+        display: flex;
+
+    }
+    .employees .cards .card img {
+        height: 100px;
+        width: 100px;
+        border-radius: 50%;
+        margin-bottom: 15px;
+        margin-top: 15px;
+    }
+    .employees .cards .card h5 {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 5px;
+        color: var(--color-gray-light);
+    }
+    .employees .cards .card h6 {
+        font-size: 16px;
+        font-weight: 400;
+        margin-bottom: 10px;
+        color: var(--color-gray-light);
+    }
+    .employees .cards .card .row {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+    }
+    button{
+        height: 40px;
+        width: 150px;
+        background: var(--color-primary);
+        color: var(--color-white);
+        font-size: 14px;
+        font-weight: 700;
+        border-radius: 10px;
+    }
+    button.second {
+        background: #e9eef5;
+    }
+
+</style>
+
+<section class="employees">
+    <div class="top">
+            <span class="material-icons-sharp">add</span>
+            <h1>New user</h1>
+    </div>
+
+    <div class="cards">
+
+        {% for x in employee %}
+        <div class="card">
+            <div class="option">
+                <span class="material-icons-sharp">more_horiz</span>
+            </div>
+            {% if x.image %}
+            <img src="{{x.image.url}}" alt="">
+            {% else%}
+            <img src="{% static 'app/images/profile-1.jpg' %}" alt="">
+            {% endif %}
+            <h5>{{x.first_name}} {{x.last_name}}</h5>
+            <h6>{{x.role}}</h6>
+            <div class="row">
+                <a href="{% url 'employeesDetails' x.id %}"><button>Profile</button></a>
+                <button class="second"><p style="font-size: 15px;">{{x.remainDuration}} of {{x.contractDuration}}</p></button>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</section>
+
+
+{% endblock %}

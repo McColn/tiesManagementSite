@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIES</title>
+    <!-- Cleave.js CSS (optional, for styling) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/addons/cleave-phone.us.css" />
+    <!-- Cleave.js JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js"></script>
+
+    <style>
+        .info{
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .info h5{
+            font-size: 28px;
+            font-weight: 800;
+            text-align: center;
+            color: #86848c;
+        }
+        .info form {
+            border: 1px dotted var(--color-primary);
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .info form .row{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 10px;
+        }
+        .info form .row div{
+            display: flex;
+            flex-direction: column;
+        }
+        .info form .row div label{
+            font-size: 20px;
+            font-weight: 400;
+            color: #86848c;
+        }
+        .info form .row div input{
+            padding: 10px;
+            border: 1px solid #86848c;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 18px;
+            color: #86848c;
+        }
+        .info form button {
+            padding: 10px 30px;
+            background: var(--color-primary);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <section class="info">
+        
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h5>Edit User Basic Info</h5>
+            <div class="row">
+                <div>
+                    <label for="first_name">Firstname</label>
+                    <input type="text" name="first_name" value="{{employee.first_name}}">
+                </div>
+                <div>
+                    <label for="last_name">Lastname</label>
+                    <input type="text" name="last_name" value="{{employee.last_name}}">
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label for="middle_name">Middle name</label>
+                    <input type="text" name="middle_name" value="{{employee.middle_name}}">
+                </div>
+                <div>
+                    <label for="email">Email</label>
+                    <input type="text" name="email" value="{{employee.email}}">
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label for="username">Username</label>
+                    <input type="text" name="username" value="{{employee.username}}">
+                </div>
+                <div>
+                    <label for="gender">Gender</label>
+                    <input type="text" name="gender" value="{{employee.gender}}">
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label for="phone">Phone number</label>
+                    <input type="text" name="phone" value="{{employee.phone}}">
+                </div>
+                <div>
+                    <label for="birthDate">Birth Date</label>
+                    <input type="text" name="birthDate" id="date" placeholder="MM DD YYYY">
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label for="image">Profile Image</label>
+                    <input type="file" name="image">
+                </div> 
+            </div>
+            <button type="submit">Update</button>
+        </form>
+    </section>
+
+    <script>
+        // Initialize Cleave.js for date field
+        new Cleave('#date', {
+          date: true,
+          datePattern: ['m', 'd', 'Y']
+        });
+    
+        // Initialize Cleave.js for time field
+        // new Cleave('#time', {
+        //   time: true,
+        //   timePattern: ['h', 'm']
+        // });
+      </script>
+
+</body>
+</html>

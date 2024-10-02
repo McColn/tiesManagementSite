@@ -1,0 +1,242 @@
+{% extends 'finance/base2.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    /* graphs */
+    .transactions{}
+    .transactions .top {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 20px;
+        background: transparent;
+    }
+    .transactions .top .card {
+        padding: 20px;
+        background: var(--color-white);
+        border-radius: 10px;
+        height: 300px;
+    }
+    .transactions .top .card .header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .transactions .top .card .header h6{
+        font-size: 13px;
+        color: var(--color-gray-light);
+    }
+    .transactions .top .card .header .row{
+        display: flex;
+        gap: 10px;
+    }
+    .transactions .top .card .header .row .first,
+    .transactions .top .card .header .row .second {
+        display: flex;
+        gap: 5px;
+    }
+    .transactions .top .card .header .row .first div{
+        padding: 5px 10px;
+        background: var(--color-primary);
+    }
+    .transactions .top .card .header .row .second div{
+        padding: 5px 10px;
+        background: var(--color-gray-light);
+    }
+    .transactions .top .card .header .row .first div p,
+    .transactions .top .card .header .row .second div p{
+        font-size: 11px;
+        font-weight: 400;
+        color: var(--color-gray-light);
+    }
+    /* body */
+    .transactions{}
+    .transactions h5{
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--color-gray-dark);
+        margin: 30px 0 10px 0;
+    }
+    .transactions .cardDesktop {
+        padding: 20px;
+        background: var(--color-white);
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: all 3ms ease;
+    }
+    .transactions .cardDesktop:hover {
+        box-shadow: none;
+    }
+    .transactions .cardDesktop .header{
+        display: grid;
+        grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
+        padding: 0px 0;
+    }
+    .transactions .cardDesktop .header li{
+        font-weight: 800;
+        font-size: 16px;
+        color: var(--color-gray-dark);
+    }
+    .transactions .cardDesktop .data{
+        display: grid;
+        grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
+        align-items: center;
+        padding: 20px 0;
+    }
+    .transactions .cardDesktop .data li{
+        font-weight: 400;
+        font-size: 16px;
+        color: var(--color-gray-light);
+    }
+    .transactions .cardDesktop .data li h6,
+    .transactions .cardDesktop .data li#amount{
+        font-weight: 600;
+        font-size: 15px;
+        color: var(--color-gray-dark);
+    }
+    .transactions .cardDesktop .data li p{
+        font-weight: 200;
+        font-size: 16px;
+        color: var(--color-gray-light);
+    }
+    .transactions .cardPhone{
+        background: var(--color-white);
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+        display: none;
+    }
+    .transactions .cardPhone .phoneTable div{
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        align-items: center;
+        margin: 10px 0;
+    }
+    .transactions .cardPhone .phoneTable div li {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--color-gray-dark);
+    }
+    .transactions .cardPhone .phoneTable div p {
+        font-size: 16px;
+        font-weight: 400;
+        color: var(--color-gray-light);
+    }
+
+    /* MEDIA QUERY FOR MOBILE PHONE */
+    @media screen and (max-width: 700px) {
+        .transactions .top {
+            grid-template-columns: 1fr;
+        }
+        .transactions .top .card {
+            margin: 0 10px 0 10px;
+            padding: 10px;
+        }
+        .transactions .cardDesktop{
+            display: none;
+        }
+        .transactions .cardPhone{
+            display: block;
+            margin: 30px 0;
+        }
+        
+    }
+</style>
+
+<section class="transactions">
+
+    <div class="top">
+
+        <div class="card">
+            <div class="header">
+                <h6>Monthly Comparison</h6>
+                <div class="row">
+                    <div class="first">
+                        <div></div>
+                        <p>This Year</p>
+                    </div>
+                    <div class="second">
+                        <div></div>
+                        <p>Last Year</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grap"></div>
+        </div>
+
+        <div class="card">
+            <div class="header">
+                <h6>Weekly Comparison</h6>
+                <div class="row">
+                    <div class="first">
+                        <div></div>
+                        <p>This Year</p>
+                    </div>
+                    <div class="second">
+                        <div></div>
+                        <p>Last Year</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grap"></div>
+        </div>
+  
+    </div>
+
+    <h5>Transactions</h5>
+
+    <!-- desktop view -->
+    <div class="cardDesktop">
+        <div class="header" style="padding: 30px 0;">
+            <li>Date</li>
+            <li>Category</li>
+            <li>Description</li>
+            <li>Amount</li>
+            <li>Processed By</li>
+        </div>
+        <div class="data">
+            <li>12 Jan 2024 10:00</li>
+            <li>Electricity</li>
+            <li>
+                <h6>Electricity Bill</h6>
+                <p>Payed today with extras</p>
+            </li>
+            <li id="amount">20,000,000</li>
+            <li>Upendo Lyanga</li>
+        </div>
+    </div>
+
+    <!-- phone view -->
+    <div class="cardPhone">
+        <div class="phoneTable">
+            <div>
+                <li>Date:</li>
+                <p>12 Jan 2024 10:00</p>
+            </div>
+            <div>
+                <li>Category:</li>
+                <p>Electricity</p>
+            </div>
+            <div>
+                <li>Description:</li>
+                <span>
+                    <p>Electricity Bill</p>
+                    <p>Payed today with extras</p>
+                </span>
+            </div>
+            <div>
+                <li>Amount:</li>
+                <p>20,000,000</p>
+            </div>
+            <div>
+                <li>Processed:</li>
+                <p>Upendo Lyanga</p>
+            </div>
+        </div>
+    </div>
+    
+</section>
+
+{% endblock %}

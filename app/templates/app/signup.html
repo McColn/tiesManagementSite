@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIES - Signin page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            outline: 0;
+            border: 0;
+            appearance: none;
+            text-decoration: none;
+            list-style: none;
+            box-sizing: border-box;
+        }
+        .container{
+            /* height: 100vh; */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .items {
+            border: 1px solid rgb(169, 134, 234);
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+            gap: 10px;
+            border-radius: 20px;
+            padding: 5px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        .left{
+            background-color: rgb(241, 240, 238);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+            border-radius: 20px 0 0 20px;
+        }
+        img {
+            width: 300px;
+            height: auto;
+        }
+        .right form{
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px;
+        }
+        h4 {
+            font-weight: 900;
+            font-size: 26px;
+            align-self: center;
+            margin-top: 30px;
+        }
+        .right label {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .right input {
+            border: 1px solid rgb(135, 174, 222);
+            padding: 10px;
+            width: 100%;
+            font-size: 14px;
+            border-radius: 5px;
+            margin:10px 30px 10px 0px;
+        }
+        button {
+            padding: 10px;
+            margin: 10px 60px;
+            border: none;
+            background: #ffc;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        p {
+            align-self: center;
+            font-size: 16px;
+            font-weight: 100;
+            margin-bottom: 30px;
+        }
+
+        /* MEDIA QUERY FOR MOBILE PHONE */
+        @media screen and (max-width: 600px) {
+            
+            .items {
+                flex-direction: column;
+                overflow: hidden;
+            }
+            .left {
+                padding: 50px;
+            }
+            .right input {
+                width: 95%;
+                margin: 10px 30px 10px 0px;
+                padding: 10px;
+            }
+            p{
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="items">
+            <div class="left">
+                <img src="{% static 'app/images/logo1.png' %}" alt="">
+                
+            </div>
+            <div class="right">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <h4>Signup page</h4>
+
+                    <label for="firstname">First name</label>
+                    <input type="text" placeholder="Firstname" name="firstname">
+
+                    <label for="lastname">Last name</label>
+                    <input type="text" placeholder="Last name" name="lastname">
+
+                    <label for="username">Username</label>
+                    <input type="text" placeholder="username" name="username">
+        
+                    <label for="email">Email</label>
+                    <input type="email" placeholder="Email" name="email">
+
+                    <label for="password">Password</label>
+                    <input type="password" placeholder="Password" name="password1">
+
+                    <label for="password">Conferm Password</label>
+                    <input type="password" placeholder=" Conferm Password" name="password2">
+
+                    <button type="submit">Signup</button>
+                    <p>Already registered, please <a href="{% url 'signin' %}">Signin</a></p>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>

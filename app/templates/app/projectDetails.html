@@ -1,0 +1,1038 @@
+{% extends 'app/base2.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<style>
+    .clientDetails{}
+    .clientDetails .top {
+        background: var(--color-white);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .clientDetails .top div{
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        background: var(--color-primary);
+        padding: 2px 10px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        color: var(--color-white);
+    }
+    .clientDetails .top div p {
+        font-size: 18px;
+        font-weight: 400;
+        color: var(--color-white);
+        
+    }
+    .clientDetails .top h4{
+        font-size: 30px;
+        color: var(--color-gray-dark);
+        margin-top: 40px;
+    }
+    .clientDetails .top h5{
+        font-size: 24px;
+        color: var(--color-gray-light);
+    }
+    .clientDetails .top .line{
+        height: 1px;
+        width: 95%;
+        background: var(--color-gray-light);
+    }
+    .clientDetails .subtop {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        background: var(--color-white);
+    }
+    .clientDetails .subtop div {
+        padding: 20px;
+    }
+    .clientDetails .subtop h6{
+        font-size: 16px;
+        color: var(--color-gray-dark);
+    }
+    .clientDetails .subtop p{
+        font-size: 13px;
+        color: var(--color-gray-light);
+    }
+    .clientDetails .main-body {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+    }
+    
+    .clientDetails .main-body .left .top {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+        margin-top: 20px;
+        background: transparent;
+    }
+    .clientDetails .main-body .left .top .top-card{
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        background: var(--color-white);
+        border-radius: 10px;
+    }
+    .clientDetails .main-body .left .top .top-card .card{
+        height: 50px;
+        width: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: var(--color-primary);
+        box-shadow: 0 4px 8px var(--color-primary);
+        transition: 300ms ease; 
+        margin-bottom: 50px;
+    }
+    .clientDetails .main-body .left .top .top-card .card:hover{
+        box-shadow: none;
+    }
+    .clientDetails .main-body .left .top .top-card .card span {
+        color: var(--color-white);
+    }
+    .clientDetails .main-body .left .top .top-card h5{
+        font-size: 20px;
+        font-weight: 300;
+        color: var(--color-gray-light);
+        margin-bottom: 10px;
+    }
+    .clientDetails .main-body .left .top .top-card h6{
+        font-size: 26px;
+        font-weight: 500;
+        color: var(--color-gray-dark);
+    }
+    .clientDetails .main-body .left .top .top-card small{
+        font-size: 12px;
+        font-weight: 200;
+        color: var(--color-primary);
+        margin-bottom: 10px;
+    }
+    .clientDetails .main-body .left .bottom {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 20px;
+        background: transparent;
+    }
+    .clientDetails .main-body .left .bottom .expenses,
+    .clientDetails .main-body .left .bottom .budgets {
+        background: var(--color-white);
+    }
+    .clientDetails .main-body .left .bottom .expenses .content,
+    .clientDetails .main-body .left .bottom .budgets .content{
+        margin: 20px;
+    }
+    .clientDetails .main-body .left .bottom .expenses h5,
+    .clientDetails .main-body .left .bottom .budgets h5{
+        font-size: 20px;
+        font-weight: 500;
+        color: var(--color-gray-dark);
+        margin-bottom: 10px;
+    }
+    .clientDetails .main-body .left .bottom .expenses .content .expense{
+        background: #fceff7;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    .clientDetails .main-body .left .bottom .budgets .content .budget{
+        background: #fff;
+        border-left: 2px solid red;
+        margin-bottom: 10px;
+        padding: 10px;
+    }
+    .clientDetails .main-body .left .bottom .expenses .content .expense h6,
+    .clientDetails .main-body .left .bottom .budgets .content .budget h6,
+    .clientDetails .main-body .card .remark h6{
+        font-size: 12px;
+        font-weight: 300;
+    }
+    .clientDetails .main-body .left .bottom .expenses .content .expense h5,
+    .clientDetails .main-body .left .bottom .budgets .content .budget h5,
+    .clientDetails .main-body .card .remark h5{
+        font-size: 18px;
+        font-weight: 500;
+        color: var(--color-gray-light);
+        margin-bottom: 10px;
+    }
+    .clientDetails .main-body .left .bottom .expenses .content .expense h4,
+    .clientDetails .main-body .left .bottom .budgets .content .budget h4,
+    .clientDetails .main-body .card .remark h4{
+        font-size: 20px;
+        font-weight: 500;
+        color: var(--color-gray-dark);
+        margin-top: -10px;
+    }
+    .clientDetails .main-body .left .bottom .expenses .content .expense p,
+    .clientDetails .main-body .left .bottom .budgets .content .budget p,
+    .clientDetails .main-body .card .remark p{
+        font-size: 14px;
+        font-weight: 300;
+        color: var(--color-gray-light);
+    }
+    .clientDetails .main-body .left .bottom .expenses .content .add,
+    .clientDetails .main-body .left .bottom .budgets .content .add{
+        height: 40px;
+        width: 40px;
+        display: flex;
+        border: 1px dashed var(--color-primary);
+        align-items: center;
+        justify-content: center;
+        transition: 300ms ease;
+    }
+    .clientDetails .main-body .left .bottom .expenses .content .add:hover,
+    .clientDetails .main-body .left .bottom .budgets .content .add:hover{
+        background: var(--color-primary);
+        color: var(--color-white);
+        cursor: pointer;
+    }
+    .clientDetails .main-body .right{
+        margin-top: 20px;
+    }
+    .clientDetails .main-body .right .card{
+        background: var(--color-white);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+    .clientDetails .main-body .right .card .top1{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .clientDetails .main-body .right .card .top1 h5{
+        font-size: 18px;
+        font-weight: 500;
+        color: var(--color-gray-dark);
+    }
+    .clientDetails .main-body .right .card .top1 h4{
+        font-size: 25px;
+        font-weight: 800;
+        color: var(--color-gray-dark);
+        margin: 10px 0 0 0;
+    }
+    .clientDetails .main-body .right .card .line{
+        height: 2px;
+        width: 100%;
+        background: var(--color-gray-dark);
+        margin: 10px 0;
+    }
+    .clientDetails .main-body .right .card .top1 .add{
+        height: 40px;
+        width: 40px;
+        display: flex;
+        border: 1px dashed var(--color-primary);
+        align-items: center;
+        justify-content: center;
+        transition: 300ms ease;
+    }
+    .clientDetails .main-body .right .card .top1 .add:hover{
+        background: var(--color-primary);
+        color: #fff;
+        cursor: pointer;
+    }
+    .clientDetails .main-body .right .card .remark{
+        border-left: 2px solid var(--color-warning);
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    .clientDetails .main-body .right .card .remark h6{
+        font-size: 12px;
+        font-weight: 300;
+        color: var(--color-gray-light);
+    }
+    .clientDetails .main-body .right .card .remark p{
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--color-gray-dark);
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      transition: all 300ms ease;
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto; /* 15% from the top and centered */
+      padding: 20px;
+      border: 1px solid #888;
+      border-radius: 10px;
+      width: 50%; /* Could be more or less, depending on screen size */
+    }
+    .close,
+    .close2,
+    .close3,
+    .close4,
+    .close5,
+    .close6 {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus,
+    .close2:hover,
+    .close2:focus,
+    .close3:hover,
+    .close3:focus,
+    .close4:hover,
+    .close4:focus,
+    .close5:focus,
+    .close6:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* popup */
+    .info{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            padding: 20px;
+        }
+        .info h5{
+            font-size: 22px;
+            font-weight: 600;
+            text-align: center;
+            color: var(--color-gray-light);
+            margin-bottom: 10px;
+        }
+        .info form {
+            /* border: 1px dotted blue; */
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .info form .row{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 10px;
+        }
+        .info form .row2 div{
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+        .info form .row2 div textarea{
+            padding: 10px;
+            border: 1px solid #86848c;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 14px;
+            color: var(--color-gray-light);
+            width: 100%;
+        }
+        .info form .row2 div input{
+            padding: 10px;
+            border: 1px solid #86848c;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 14px;
+            color: var(--color-gray-light);
+            width: 100%;
+        }
+        .info form .row div{
+            display: flex;
+            flex-direction: column;
+        }
+        .info form .row div label,
+        .info form .row2 div label{
+            font-size: 15px;
+            font-weight: 400;
+            margin-bottom: 5px;
+            color: var(--color-gray-light);
+        }
+        .info form .row div input,
+        .info form .row div select
+        {
+            padding: 10px;
+            border: 1px solid #86848c;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 14px;
+            color: var(--color-gray-light);
+            width: 300px;
+        }
+        .info form button {
+            padding: 10px 30px;
+            background: var(--color-primary);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+
+    /* MEDIA QUERY FOR MOBILE PHONE */
+    @media screen and (max-width: 700px) {
+        .clientDetails .subtop {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .clientDetails .main-body {
+        grid-template-columns: 1fr;
+    }
+    
+    .clientDetails .main-body .left .top {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .clientDetails .main-body .left .bottom {
+        grid-template-columns: 1fr;
+    }
+
+    /* popup */
+    .info{
+            height: auto;
+        }
+        .info form .row{
+            grid-template-columns: 1fr;
+        }
+        .info form .row div{
+            display: flex;
+            flex-direction: column;
+        }
+        .info form button {
+            width: 100%;
+        }
+
+        /* Modal styles */
+        
+        .modal-content {
+            width: 95%; 
+        }
+}
+</style>
+<section class="clientDetails">
+
+    <div class="top">
+        <h4>{{project.title}} - {{project.location}}</h4>
+        <h5>{{project.client.clientName}}</h5>
+        <div  id="openModalProjectEdit">
+            <p>
+                Update status
+            </p>
+            <!-- <div class="add">
+                <span class="material-icons-sharp">edit</span>
+            </div> -->
+        </div>
+        <div class="line"></div>
+    </div>
+
+    <div class="subtop">
+        <div>
+            <h6>Start Date:</h6>
+            <p>{{project.startDate}}</p>
+        </div>
+        <div>
+            <h6>End Date:</h6>
+            <p>{{project.endDate}}</p>
+        </div>
+        <div>
+            <h6>Status:</h6>
+            <p>{{project.status}}</p>
+        </div>
+        <div>
+            <h6>Performance:</h6>
+            <!-- <p>{{project.performance}}</p> -->
+            <p>{{performance}}%</p>
+        </div>
+    </div>
+    
+    <div class="main-body">
+        <div class="left">
+            <div class="top">
+                <div class="top-card">
+                    <!-- <div class="card">
+                        <span class="material-icons-sharp">euro</span>
+                    </div> -->
+                    <h5>Income</h5>
+                    <h6>{{ total_income|intcomma }}</h6>
+                    <small>-%</small>
+                </div>
+                <div class="top-card">
+                    <!-- <div class="card" style="background: var(--color-warning); box-shadow: 0 4px 8px var(--color-warning);">
+                        <span class="material-icons-sharp">payments</span>
+                    </div> -->
+                    <h5>Budget</h5>
+                    <h6>{{ total_budget|intcomma }}</h6>
+                    <small>-%</small>
+                </div>
+                <div class="top-card">
+                    <!-- <div class="card" style="background: var(--color-purple); box-shadow: 0 4px 8px var(--color-purple);">
+                        <span class="material-icons-sharp">arrow_outward</span>
+                    </div> -->
+                    <h5>Expenses</h5>
+                    <h6>{{ total_expense|intcomma }}</h6>
+                    <small>-%</small>
+                </div>
+                <div class="top-card">
+                    <!-- <div class="card" style="background: var(--color-success); box-shadow: 0 4px 8px var(--color-success);">
+                        <span class="material-icons-sharp">vertical_align_bottom</span>
+                    </div> -->
+                    <h5>Saving</h5>
+                    <h6>{{saved_amount|intcomma}}</h6>
+                    <small>-%</small>
+                </div>
+            </div>
+
+            <div class="bottom">
+                <div class="expenses">
+                    <div class="content">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <h5>Expenses</h5>
+                            <div class="add" id="openModalBasic">
+                                <span class="material-icons-sharp">add</span>
+                            </div>
+                        </div>
+                        
+                        {% for expense in projectExpense %}
+                        <div class="expense">
+                            <h6>{{expense.issuedDate}}</h6>
+                            <h5>{{expense.title}}</h5>
+                            <h4>{{expense.amount|intcomma}} Tsh.</h4>
+                            <p>{{expense.description}}</p>
+                        </div>
+                        {% empty %}
+                            <li>No expense information available.</li>
+                        {% endfor %}
+
+                        
+                        
+                    </div>
+                </div>
+                <div class="budgets">
+                    <div class="content">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <h5>Budget</h5>
+                            <div class="add" id="openModalPersonal">
+                                <span class="material-icons-sharp">add</span>
+                            </div>
+                        </div>
+
+                        {% for budget in projectBudget %}
+                        <div class="budget">
+                            <h6>{{budget.issuedDate}}</h6>
+                            <h5>{{budget.title}}</h5>
+                            <h4>{{budget.amount|intcomma}} Tsh.</h4>
+                            <p>{{budget.desription}}</p>
+                        </div>
+                        {% empty %}
+                            <li>No budget information available.</li>
+                        {% endfor %}
+                        
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="right">
+
+            <div class="card">
+                <div class="top1">
+                    <div>
+                        <h5>Up-to-date Payment</h5>
+                        <h4>{{total_payment|intcomma}} Tsh</h4>
+                        <p>{{percentage_payment_left}}% left for total Payment</p>
+                    </div>
+                    
+                    <div class="add" id="openModalPayment">
+                        <span class="material-icons-sharp">add</span>
+                    </div>
+                </div>
+
+                <div class="line"></div>
+                
+                {% for payment in projectPayment %}
+                <div class="remark">
+                    <h6>{{payment.issuedDate}}</h6>
+                    <p>
+                        {{payment.title}}
+                    </p>
+                    
+                </div>
+                {% empty %}
+                    <li>No payments available.</li>
+                {% endfor %}
+                
+            </div>
+
+            <div class="card">
+                <div class="top1">
+                    <h5>Remark, Project Updates</h5>
+                    <div class="add" id="openModalEducation">
+                        <span class="material-icons-sharp">add</span>
+                    </div>
+                </div>
+                
+                {% for update in projectUpdate %}
+                <div class="remark">
+                    <h6>{{update.issuedDate}}</h6>
+                    <p>
+                        {{update.desription}}
+                    </p>
+                    
+                </div>
+                {% empty %}
+                    <li>No updates available.</li>
+                {% endfor %}
+                
+            </div>
+
+            <div class="card">
+                <div class="top1">
+                    <h5>Invoice Items</h5>
+                    <div class="add" id="openModalInvoice">
+                        <span class="material-icons-sharp">add</span>
+                    </div>
+                </div>
+                
+                {% for i in projectInvoice %}
+                <div class="remark">
+                    <h6>{{i.issuedDate}}</h6>
+                    <h5>{{i.title}}</h5>
+                    <h4>{{i.amount|intcomma}} Tsh.</h4>
+                    <p>{{i.desription}}</p>
+                </div>
+                {% empty %}
+                    <li>No updates available.</li>
+                {% endfor %}
+                
+            </div>
+
+        </div>
+
+    </div>
+
+
+    
+    <!--Expenses Add -->
+<div id="basic" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      
+      <section class="info">
+        
+        <form action="{% url 'projectExpensesAdd' project_id=project_id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h5>Add New Expenses</h5>
+            <div class="row">
+                <div>
+                    <label for="title">Expenses Title</label>
+                    <input type="text" name="title">
+                </div>
+                <div>
+                    <label for="amount">Amount</label>
+                    <input type="number" name="amount" step="0.01">
+                </div>
+            </div>
+            <div class="row2">
+                <div>
+                    <label for="desription">Expense Desription</label>
+                    <!-- <input type="text" name="desription"> -->
+                    <textarea name="desription" rows="4"></textarea>
+                </div>
+            </div>
+            
+            <button type="submit">Add An Expense</button>
+        </form>
+      </section>
+
+    </div>
+</div>
+
+
+<!--Budget Modal -->
+<div id="personal" class="modal">
+    <div class="modal-content">
+      <span class="close2">&times;</span>
+      
+      <section class="info">
+        
+        <form action="{% url 'projectBudgetAdd' project_id=project_id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h5>Add Budget</h5>
+            <div class="row">
+                <div>
+                    <label for="title">Budget Title</label>
+                    <input type="text" name="title">
+                </div>
+                <div>
+                    <label for="amount">Amount</label>
+                    <input type="number" name="amount" step="0.01">
+                </div>
+            </div>
+            <div class="row2">
+                <div>
+                    <label for="desription">Budget Desription</label>
+                    <textarea name="desription" rows="4"></textarea>
+                </div>
+            </div>
+            
+            <button type="submit">Add Budget</button>
+        </form>
+
+      </section>
+
+    </div>
+</div>
+
+<!--Project Updates remark -->
+<div id="education" class="modal">
+    <div class="modal-content">
+      <span class="close3">&times;</span>
+      
+      <section class="info">
+        
+        <form action="{% url 'projectRemarkAdd' project_id=project_id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h5>Add an Project Update</h5>
+
+            <div class="row2">
+                <div>
+                    <label for="desription">Project Update or Remark</label>
+                    <textarea name="desription" rows="4" style="width: 600px;"></textarea>
+                </div>
+            </div>
+            
+            <button type="submit">Add an Update</button>
+        </form>
+      </section>
+
+    </div>
+</div>
+
+    <!--Project Edit -->
+    <div id="projectEdit" class="modal">
+        <div class="modal-content">
+          <span class="close4">&times;</span>
+          
+          <section class="info">
+            
+            <form action="{% url 'projectEdit' project.id %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h5>Edit  Project</h5>
+                <div class="row">
+                    <div>
+                        <label for="title">Project Name</label>
+                        <input type="text" name="title" value="{{project.title}}">
+                    </div>
+                    <div>
+                        <label for="client">Client</label>
+                        <select class="form-control" name="client" required>
+                            <option value="{{project.client}}"></option>
+                            {% for x in clients %}
+                                <option value="{{ x.id }}">
+                                    {{ x.clientName }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <label for="location">Project Location</label>
+                        <input type="text" name="location" value="{{project.location}}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <label for="startDate">Start Date</label>
+                        <input type="date" name="startDate" value="{{project.startDate}}">
+                    </div>
+                    <div>
+                        <label for="endDate">End Date</label>
+                        <input type="date" name="endDate" value="{{project.endDate}}">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div>
+                        <label for="startDate">Status</label>
+                        <select id="" name="status" value="{{project.status}}">
+                            <option value="">-----</option>
+                            <option value="New">New</option>
+                            <option value="Ongoing">Ongoing</option>
+                            <option value="Paused">Paused</option>
+                            <option value="Complete">Complete</option>
+                        </select>
+                    </div>
+                    
+                </div>
+                
+                <button type="submit">Edit Project</button>
+            </form>
+          </section>
+    
+        </div>
+    </div>
+
+
+    <!--Invoice statement Modal -->
+<div id="invoice" class="modal">
+    <div class="modal-content">
+      <span class="close5">&times;</span>
+      
+      <section class="info">
+        
+        <form action="{% url 'projectInvoiceAdd' project_id=project_id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h5>Add Invoice Item</h5>
+            <div class="row">
+                <div>
+                    <label for="title">Invoice Title</label>
+                    <input type="text" name="title">
+                </div>
+                <div>
+                    <label for="amount">Amount</label>
+                    <input type="number" name="amount" step="0.01">
+                </div>
+            </div>
+            <div class="row2">
+                <div>
+                    <label for="desription">Invoice Desription</label>
+                    <textarea name="desription" rows="4"></textarea>
+                </div>
+            </div>
+            
+            <button type="submit">Add Invoice Item</button>
+        </form>
+
+      </section>
+
+    </div>
+</div>
+
+
+<!--Project Payment -->
+<div id="payment" class="modal">
+    <div class="modal-content">
+      <span class="close6">&times;</span>
+      
+      <section class="info">
+        
+        <form action="{% url 'projectPaymentAdd' project_id=project_id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h5>Add new Payment</h5>
+
+            <div class="row2">
+                <div>
+                    <label for="desription">Payment Title Description</label>
+                    <textarea name="title" rows="4" style="width: 600px;"></textarea>
+                </div>
+            </div>
+
+            <div class="row2">
+                <div>
+                    <label for="desription">Amount</label>
+                    <input name="amount" style="width: 600px;"></input>
+                </div>
+            </div>
+            
+            <button type="submit">Add Payment</button>
+        </form>
+      </section>
+
+    </div>
+</div>
+
+
+<!--Basic info Script -->
+<script>
+    // Get the modal
+    var modal = document.getElementById("basic");
+  
+    // Get the button that opens the modal
+    var btn = document.getElementById("openModalBasic");
+  
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+  
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+  
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+</script>
+
+<!--Personal info Script -->
+<script>
+    // Get the modal
+    var modal2 = document.getElementById("personal");
+  
+    // Get the button that opens the modal
+    var btn2 = document.getElementById("openModalPersonal");
+  
+    // Get the <span> element that closes the modal
+    var span2 = document.getElementsByClassName("close2")[0];
+  
+    // When the user clicks the button, open the modal 
+    btn2.onclick = function() {
+      modal2.style.display = "block";
+    }
+  
+    // When the user clicks on <span> (x), close the modal
+    span2.onclick = function() {
+      modal2.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal2) {
+        modal2.style.display = "none";
+      }
+    }
+</script>
+
+<!--Education info Script -->
+<script>
+    // Get the modal
+    var modal3 = document.getElementById("education");
+  
+    // Get the button that opens the modal
+    var btn3 = document.getElementById("openModalEducation");
+  
+    // Get the <span> element that closes the modal
+    var span3 = document.getElementsByClassName("close3")[0];
+  
+    // When the user clicks the button, open the modal 
+    btn3.onclick = function() {
+      modal3.style.display = "block";
+    }
+  
+    // When the user clicks on <span> (x), close the modal
+    span3.onclick = function() {
+      modal3.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal3) {
+        modal3.style.display = "none";
+      }
+    }
+</script>
+
+<!--Education info Script -->
+<script>
+    // Get the modal
+    var modal4 = document.getElementById("projectEdit");
+  
+    // Get the button that opens the modal
+    var btn4 = document.getElementById("openModalProjectEdit");
+  
+    // Get the <span> element that closes the modal
+    var span4 = document.getElementsByClassName("close4")[0];
+  
+    // When the user clicks the button, open the modal 
+    btn4.onclick = function() {
+      modal4.style.display = "block";
+    }
+  
+    // When the user clicks on <span> (x), close the modal
+    span4.onclick = function() {
+      modal4.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal4) {
+        modal4.style.display = "none";
+      }
+    }
+</script>
+
+
+<!--Invoice info Script -->
+<script>
+    // Get the modal
+    var modal5 = document.getElementById("invoice");
+  
+    // Get the button that opens the modal
+    var btn5 = document.getElementById("openModalInvoice");
+  
+    // Get the <span> element that closes the modal
+    var span5 = document.getElementsByClassName("close5")[0];
+  
+    // When the user clicks the button, open the modal 
+    btn5.onclick = function() {
+      modal5.style.display = "block";
+    }
+  
+    // When the user clicks on <span> (x), close the modal
+    span5.onclick = function() {
+      modal5.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal5) {
+        modal5.style.display = "none";
+      }
+    }
+</script>
+
+
+<!--payment info Script -->
+<script>
+    // Get the modal
+    var modal6 = document.getElementById("payment");
+  
+    // Get the button that opens the modal
+    var btn6 = document.getElementById("openModalPayment");
+  
+    // Get the <span> element that closes the modal
+    var span6 = document.getElementsByClassName("close6")[0];
+  
+    // When the user clicks the button, open the modal 
+    btn6.onclick = function() {
+      modal6.style.display = "block";
+    }
+  
+    // When the user clicks on <span> (x), close the modal
+    span6.onclick = function() {
+      modal6.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal6) {
+        modal6.style.display = "none";
+      }
+    }
+</script>
+
+</section>
+
+{% endblock %}

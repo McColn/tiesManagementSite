@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar with Events</title>
+    <style>
+        /* Basic CSS styles for the calendar */
+        .calendar {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        .calendar th, .calendar td {
+            border: 1px solid #ccc;
+            text-align: center;
+            padding: 10px;
+        }
+        .calendar th {
+            background-color: #f4f4f4;
+        }
+        .calendar td {
+            height: 50px;
+            position: relative;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header button {
+            padding: 5px 10px;
+            margin: 0 10px;
+        }
+        .event {
+            background-color: #ffeb3b;
+            padding: 5px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <button onclick="prevMonth()">&#10094; Previous</button>
+        <span id="monthYear"></span>
+        <button onclick="nextMonth()">Next &#10095;</button>
+    </div>
+
+    <table class="calendar">
+        <thead>
+            <tr>
+                <th>Sun</th>
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+            </tr>
+        </thead>
+        <tbody id="calendarBody">
+            <!-- Calendar days will be generated here -->
+        </tbody>
+    </table>
+
+    <form method="POST" action="{% url 'calendar' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Event</button>
+    </form>
+
+    <script>
+        const calendarBody = document.getElementById('calendarBody');
+        const monthYear = document.getElementById('monthYear');
+
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        // Parse events from Django into JavaScript
+        const events = JSON.parse('{{ events|safe|escapejs }}');
+
+        function generateCalendar(month, year) {
+            calendarBody.innerHTML = ''; // Clear the calendar
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            const months = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+
+            monthYear.innerHTML = `${months[month]} ${year}`;
+
+            let date = 1;
+            for (let i = 0; i < 6; i++) {
+                const row = document.createElement('tr');
+
+                for (let j = 0; j < 7; j++) {
+                    if (i === 0 && j < firstDay) {
+                        const cell = document.createElement('td');
+                        row.appendChild(cell);
+                    } else if (date > daysInMonth) {
+                        break;
+                    } else {
+                        const cell = document.createElement('td');
+                        const cellText = document.createTextNode(date);
+                        cell.appendChild(cellText);
+
+                        // Check for events on this date
+                        const eventDate = `${year}-${(month + 1).toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}`;
+                        events.forEach(event => {
+                            if (event.date === eventDate) {
+                                const eventDiv = document.createElement('div');
+                                eventDiv.className = 'event';
+                                eventDiv.innerText = event.name;
+                                cell.appendChild(eventDiv);
+                            }
+                        });
+
+                        row.appendChild(cell);
+                        date++;
+                    }
+                }
+
+                calendarBody.appendChild(row);
+            }
+        }
+
+        function prevMonth() {
+            currentYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+            currentMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+            generateCalendar(currentMonth, currentYear);
+        }
+
+        function nextMonth() {
+            currentYear = currentMonth === 11 ? currentYear + 1 : currentYear;
+            currentMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+            generateCalendar(currentMonth, currentYear);
+        }
+
+        generateCalendar(currentMonth, currentYear);
+    </script>
+
+</body>
+</html>

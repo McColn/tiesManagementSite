@@ -1,0 +1,316 @@
+{% extends 'finance/base2.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .balance{}
+    .balance h5{
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--color-gray-dark);
+    }
+    .balance .cards{
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 20px;
+        background: transparent;
+    }
+    .balance .cards .card{
+        background: var(--color-white);
+        border-radius: 15px;
+        padding: 30px;
+    }
+    .balance .cards .card .top{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .balance .cards .card .top h6{
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--color-gray-light);
+    }
+    .balance .cards .card .top div{
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        font-size: 10px;
+        font-weight: 500;
+        color: var(--color-gray-light);
+    }
+    .balance .cards .card .top div img{
+        height: 20px;
+        width: auto;
+    }
+    .balance .cards .card .cardBody{
+        margin: 20px 0 20px 0;
+    }
+    .balance .cards .card .cardBody div{
+        margin: 10px 0 10px 0;
+    }
+    .balance .cards .card .cardBody div h4{
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--color-gray-dark);
+        margin: 10px 0 0 0;
+    }
+    .balance .cards .card .cardBody div span{
+        font-size: 12px;
+        font-weight: 300;
+        color: var(--color-gray-light);
+    }
+    .balance .cards .card .bottom p{
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--color-primary);
+        cursor: pointer;
+    }
+
+    /* add button */
+    .balance .add{
+        padding: 10px 25px;
+        border: 1px dashed var(--color-primary);
+        color: var(--color-primary);
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        bottom: 50px;
+        right: 30px;
+        cursor: pointer;
+    }
+    
+    .balance .add:hover{
+        background: var(--color-primary);
+        color: var(--color-white);
+    }
+
+
+    /* Modal styles */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      transition: all 300ms ease;
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto; /* 15% from the top and centered */
+      padding: 20px;
+      border: 1px solid #888;
+      border-radius: 10px;
+      width: 50%; /* Could be more or less, depending on screen size */
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* popup */
+    .info{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            padding: 20px;
+        }
+        .info h5{
+            font-size: 22px;
+            font-weight: 600;
+            text-align: center;
+            color: var(--color-gray-light);
+            margin-bottom: 10px;
+        }
+        .info form {
+            /* border: 1px dotted blue; */
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .info form .row{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 10px;
+        }
+        .info form .row2 div{
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+        .info form .row2 div textarea{
+            padding: 10px;
+            border: 1px solid #86848c;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 14px;
+            color: var(--color-gray-light);
+            width: 100%;
+        }
+        .info form .row2 div input{
+            padding: 10px;
+            border: 1px solid #86848c;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 14px;
+            color: var(--color-gray-light);
+            width: 100%;
+        }
+        .info form .row div{
+            display: flex;
+            flex-direction: column;
+        }
+        .info form .row div label,
+        .info form .row2 div label{
+            font-size: 15px;
+            font-weight: 400;
+            margin-bottom: 5px;
+            color: var(--color-gray-light);
+        }
+        .info form .row div input,
+        .info form .row div select
+        {
+            padding: 10px;
+            border: 1px solid #86848c;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 14px;
+            color: var(--color-gray-light);
+            width: 300px;
+        }
+        .info form button {
+            padding: 10px 30px;
+            background: var(--color-primary);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+
+    /* MEDIA QUERY FOR MOBILE PHONE */
+    @media screen and (max-width: 700px) {}
+</style>
+
+<section class="balance">
+
+    <h5>Balances</h5>
+
+    <div class="cards">
+
+        {% for i in card_list %}
+        <div class="card">
+            <div class="top">
+                <h6>{{i.type}}</h6>
+                <div>
+                    {{i.name}}
+                    <img src="{{i.logo.url}}" alt="">
+                </div>
+            </div>
+            <div class="cardBody">
+                <div>
+                    <h4>{{i.number}}</h4>
+                    <span>Account Number</span>
+                </div>
+                <div>
+                    <h4>{{total_income}} Tsh</h4>
+                    <span>Total Amount</span>
+                </div>
+            </div>
+            <div class="bottom">
+                <p>Remove</p>
+            </div>
+        </div>
+        {% endfor %}
+        
+    </div>
+
+    <div class="add" id="openModalCard">
+        <span class="material-icons-sharp">add</span>
+        Add Card
+    </div>
+
+
+    <!--Add card Edit -->
+    <div id="cardAdd" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          
+          <section class="info">
+            
+            <form action="{% url 'bankCardAdd' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h5>Add Card</h5>
+                <div class="row">
+                    <div>
+                        <label for="title">Bank Name</label>
+                        <input type="text" name="name" value="">
+                    </div>
+                    <div>
+                        <label for="title">Card Type (Purpose)</label>
+                        <input type="text" name="type" value="">
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div>
+                        <label for="location">Card Number</label>
+                        <input type="text" name="number" value="">
+                    </div>
+                    <div>
+                        <label for="startDate">Logo</label>
+                        <input type="file" name="logo" value="">
+                    </div>
+                </div>
+                
+                <button type="submit">Add Card</button>
+            </form>
+          </section>
+    
+        </div>
+    </div>
+
+    <!--card info Script -->
+<script>
+    // Get the modal
+    var modal = document.getElementById("cardAdd");
+  
+    // Get the button that opens the modal
+    var btn = document.getElementById("openModalCard");
+  
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+  
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+  
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+</script>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,301 @@
+{% extends 'app/base2.html' %}
+{% load static %}
+{% load humanize %}
+{% load custom_filters %}
+{% block content %}
+
+<style>
+    .leavesDetails{}
+    .leavesDetails .top{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .leavesDetails .top img{
+        height: 100px;
+        width: 100px;
+        border-radius: 50%;
+    }
+    .leavesDetails .top h4{
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--color-gray-dark);
+    }
+    .leavesDetails .top h5{
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--color-gray-dark);
+    }
+    .leavesDetails .bdy{
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        margin: 30px 200px 0 200px;
+        gap: 20px;
+    }
+    .leavesDetails .bdy .left{
+        background: var(--color-white);
+        padding: 20px;
+    }
+    .leavesDetails .bdy .left p,
+    .leavesDetails .bdy .right p
+    {
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--color-gray-light);
+        margin: 20px 0;
+    }
+    .leavesDetails .bdy .left p span{
+        font-weight: 800;
+        color: var(--color-gray-dark);
+    }
+    .leavesDetails .bdy .left button{
+        padding: 10px 20px;
+        background: var(--color-primary);
+        color: var(--color-white);
+        font-size: 14px;
+        cursor: pointer;
+    }
+    .leavesDetails .bdy .right div#data{
+        background: var(--color-white);
+        padding: 3px;
+        margin: 10px 0;
+    }
+    .leavesDetails .bdy .right div h6{
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--color-gray-light);
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      transition: all 300ms ease;
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto; /* 15% from the top and centered */
+      padding: 20px;
+      border: 1px solid #888;
+      border-radius: 10px;
+      width: 50%; /* Could be more or less, depending on screen size */
+    }
+    .close,
+    .close2,
+    .close3,
+    .close4 {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus,
+    .close2:hover,
+    .close2:focus,
+    .close3:hover,
+    .close3:focus,
+    .close4:hover,
+    .close4:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* popup */
+    .info{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            padding: 20px;
+        }
+        .info h5{
+            font-size: 22px;
+            font-weight: 600;
+            text-align: center;
+            color: var(--color-gray-light);
+            margin-bottom: 10px;
+        }
+        .info form {
+            /* border: 1px dotted blue; */
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .info form .row{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 10px;
+        }
+        .info form .row div{
+            display: flex;
+            flex-direction: column;
+        }
+        .info form .row div label{
+            font-size: 15px;
+            font-weight: 400;
+            margin-bottom: 5px;
+            color: var(--color-gray-light);
+        }
+        .info form .row div input,
+        .info form .row div select
+        {
+            padding: 10px;
+            border: 1px solid #86848c;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 14px;
+            color: var(--color-gray-light);
+            width: 300px;
+        }
+        .info form .row div textarea
+        {
+            padding: 10px;
+            border: 1px solid #86848c;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 14px;
+            color: var(--color-gray-light);
+            width: 700px;
+        }
+        .info form button {
+            padding: 10px 30px;
+            background: var(--color-primary);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+
+
+        @media screen and (max-width: 700px) {
+            .leavesDetails .bdy {
+                grid-template-columns: 1fr;
+                margin: 30px 10px 0 10px;
+            }
+            .modal-content {
+                background-color: #fefefe;
+                margin: 2% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                border-radius: 10px;
+                width: 95%;
+            }
+        }
+</style>
+
+<section class="leavesDetails">
+    <div class="top">
+        <img src="{% static 'app/images/profile-1.jpg' %}" alt="">
+        <h4>{{leaves_details.employee.first_name}} {{leaves_details.employee.last_name}}</h4>
+        <h5>{{leaves_details.leaveType}} Request</h5>
+    </div>
+    
+
+    <div class="bdy">
+        <div class="left">
+            <p><span>Leave Start:</span> {{leaves_details.startDate}}</p>
+            <p><span>Leave End:</span> {{leaves_details.endDate}}</p>
+            <p><span>Description:</span> {{leaves_details.leave_reason}}</p>
+            <p><span>Status:</span> {{leaves_details.action}}</p>
+            {% if leaves_details.action_reason %}
+            <p><span>Description:</span> {{leaves_details.action_reason}}</p>
+            {% else %}
+            <p></p>
+            {% endif %}
+
+            {% if user|is_in_group:"directors" or user|is_in_group:"hr" %}
+            <button id="openModalBasic">Process Request</button>
+            {% endif %}
+        </div>
+
+        <div class="right">
+            <div>
+                <h6>Previous Leaves</h6>
+            </div>
+            {% for i in leaves_list %}
+            <div id="data">
+                <p>{{i.leaveType}} from {{i.startDate}} to {{i.endDate}}</p>
+                <p style="color: var(--color-primary);">{{i.action}}</p>
+            </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+
+
+            <!--Project Add -->
+<div id="basic" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      
+      <section class="info">
+        
+        <form action="{% url 'leavesActions' leaves_details.id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h5>Leave Request Form</h5>
+            <div class="row">
+                <div>
+                    <label for="client">Give Permission</label>
+                    <select class="form-control" name="action" required>
+                            <option value="">--</option>
+                            <option value="Accepted">Accept</option>
+                            <option value="Canceled">Cancel</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label for="startDate">Reason or Description</label>
+                    <textarea type="text" name="action_reason" rows="4" value="{{leaves_details.action_reason}}">{{leaves_details.action_reason}}</textarea>
+                </div>
+            </div>
+            
+            <button type="submit">Submit</button>
+        </form>
+      </section>
+
+    </div>
+</div>
+
+<!--Basic info Script -->
+<script>
+    // Get the modal
+    var modal = document.getElementById("basic");
+  
+    // Get the button that opens the modal
+    var btn = document.getElementById("openModalBasic");
+  
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+  
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+  
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+</script>
+
+</section>
+
+{% endblock %}

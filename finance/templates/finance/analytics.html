@@ -1,0 +1,117 @@
+{% extends 'finance/base2.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<style>
+    .analytics{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+    .analytics .cat-1{
+        background: var(--color-white);
+        padding: 10px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        height: fit-content;
+    }
+    .analytics .cat-1 h6{
+        font-size: 18px;
+        font-weight: 500;
+        color: var(--color-gray-dark);
+    }
+    .analytics .cat-1 p{
+        font-size: 14px;
+        font-weight: 200;
+        color: var(--color-gray-light);
+    }
+    .analytics .cat-1 button{
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--color-white);
+        padding: 10px 20px;
+        background: var(--color-warning);
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    canvas{
+        height: 200px;
+    }
+</style>
+
+<section class="analytics">
+    <div class="cat-1">
+        <!-- chart -->
+        <canvas id="chart"></canvas>
+        <!-- end of chart -->
+        <h6>Income Statement</h6>
+        <p>
+            Shows the company's revenue, expenses, and profits 
+            over a specific period (monthly, quarterly, or annually)
+        </p>
+        <a href="{% url 'incomeStatement' %}"><button>Exprole More</button></a>
+    </div>
+    <div class="cat-1">
+        <h6>Balance Sheet</h6>
+        <p>
+            showing what it owns (assets) and owes (liabilities), along with the owner's equity
+        </p>
+        <button>Exprole More</button>
+    </div>
+    <div class="cat-1">
+        <h6>Cash Flow Statement</h6>
+        <p>
+            Tracks the flow of cash in and out of the business over a period, detailing cash generated 
+            and used in operating, investing, and financing activities
+        </p>
+        <button>Exprole More</button>
+    </div>
+    <div class="cat-1">
+        <h6>Statement of Changes in Equity</h6>
+        <p>
+            Shows the changes in the company's equity over a specific period
+        </p>
+        <button>Exprole More</button>
+    </div>
+</section>
+
+
+<!-- ############################################################################################ -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const chart = document.querySelector("#chart").getContext('2d');
+
+// create a new chart instance
+new Chart(chart, {
+    type: 'line',
+    data: {
+        labels: ['Jan','Feb','March','Apr','May','Jun','July','Aug','Sep','Oct','Nov'],
+
+        datasets: [
+            {
+                label: 'BTC',
+                data: [29374,33537,49631,59095,57828,36684,33572,
+                    39974,48847,48116,61004],
+                borderColor: 'red',
+                borderWidth: 2
+            },
+            {
+                label: 'ETH',
+                data: [31500,41000,88800,26000,46000,32698,5000,
+                    3000,18656,24832,36844],
+                borderColor: 'BLUE',
+                borderWidth: 2
+            }
+        ]
+    },
+    options: {
+        responsive: true
+    }
+})
+</script>
+<!-- ############################################################################################ -->
+
+{% endblock %}

@@ -1,0 +1,623 @@
+{% extends 'finance/base2.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<style>
+    /* graphs */
+    .transactions{}
+    .transactions .top {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+        gap: 20px;
+        background: transparent;
+    }
+    .transactions .top .card {
+        padding: 20px;
+        background: var(--color-white);
+        border-radius: 10px;
+        /* height: 320px; */
+    }
+    .transactions .top .card .header div{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .transactions .top .card .header h6{
+        font-size: 13px;
+        color: var(--color-gray-light);
+    }
+    .transactions .top .card .header .row{
+        display: flex;
+        gap: 10px;
+    }
+    .transactions .top .card .header .row .first,
+    .transactions .top .card .header .row .second {
+        display: flex;
+        gap: 5px;
+    }
+    .transactions .top .card .header .row .first div{
+        padding: 5px 10px;
+        background: var(--color-primary);
+    }
+    .transactions .top .card .header .row .second div{
+        padding: 5px 10px;
+        background: var(--color-gray-light);
+    }
+    .transactions .top .card .header .row .first div p,
+    .transactions .top .card .header .row .second div p{
+        font-size: 11px;
+        font-weight: 400;
+        color: var(--color-gray-light);
+    }
+
+    .transactions .top .comparisons{
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .transactions .top .comparisons .row{
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        background: transparent;
+    }
+    .transactions .top .comparisons .row .cat{
+        background: var(--color-white);
+        padding: 30px 20px;
+        border-radius: 0;
+    }
+    .transactions .top .comparisons .row .cat h6{
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--color-gray-light);
+    }
+    .transactions .top .comparisons .row .cat h5{
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--color-gray-dark);
+    }
+    .transactions .top .comparisons .row .cat p{
+        font-size: 12px;
+        font-weight: 200;
+        color: var(--color-gray-light);
+    }
+    .transactions .top .comparisons .total{
+        background: var(--color-white);
+        padding: 20px;
+        border-radius: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .transactions .top .comparisons .total h6{
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--color-gray-light);
+    }
+    .transactions .top .comparisons .total h5{
+        font-size: 20px;
+        font-weight: 900;
+        color: var(--color-gray-dark);
+        padding: 5px 0;
+    }
+    /* body */
+    .transactions{}
+    .transactions h5{
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--color-gray-dark);
+        margin: 30px 0 10px 0;
+    }
+    .transactions .cardDesktop {
+        padding: 20px;
+        background: var(--color-white);
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: all 3ms ease;
+    }
+    .transactions .cardDesktop:hover {
+        box-shadow: none;
+    }
+    .transactions .cardDesktop .header{
+        display: grid;
+        grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
+        padding: 0px 0;
+    }
+    .transactions .cardDesktop .header li{
+        font-weight: 800;
+        font-size: 16px;
+        color: var(--color-gray-dark);
+    }
+    .transactions .cardDesktop .data{
+        display: grid;
+        grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
+        align-items: center;
+        padding: 20px 0;
+    }
+    .transactions .cardDesktop .data li{
+        font-weight: 400;
+        font-size: 16px;
+        color: var(--color-gray-light);
+    }
+    .transactions .cardDesktop .data li h6,
+    .transactions .cardDesktop .data li#amount{
+        font-weight: 600;
+        font-size: 15px;
+        color: var(--color-gray-dark);
+    }
+    .transactions .cardDesktop .data li p{
+        font-weight: 200;
+        font-size: 16px;
+        color: var(--color-gray-light);
+    }
+    .transactions .cardPhone{
+        background: var(--color-white);
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+        display: none;
+    }
+    .transactions .cardPhone .phoneTable div{
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        align-items: center;
+        margin: 10px 0;
+    }
+    .transactions .cardPhone .phoneTable div li {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--color-gray-dark);
+    }
+    .transactions .cardPhone .phoneTable div p {
+        font-size: 16px;
+        font-weight: 400;
+        color: var(--color-gray-light);
+    }
+
+    /* add button */
+    .transactions .add{
+        padding: 10px 25px;
+        border: 1px dashed var(--color-primary);
+        color: var(--color-primary);
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        bottom: 50px;
+        right: 30px;
+        cursor: pointer;
+    }
+    
+    .transactions .add:hover{
+        background: var(--color-primary);
+        color: var(--color-white);
+    }
+
+     /* Modal styles */
+     .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      transition: all 300ms ease;
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto; /* 15% from the top and centered */
+      padding: 20px;
+      border: 1px solid #888;
+      border-radius: 10px;
+      width: 50%; /* Could be more or less, depending on screen size */
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* popup */
+    .info{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            padding: 20px;
+        }
+        .info h5{
+            font-size: 22px;
+            font-weight: 600;
+            text-align: center;
+            color: var(--color-gray-light);
+            margin-bottom: 10px;
+        }
+        .info form {
+            /* border: 1px dotted blue; */
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .info form .row{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 10px;
+        }
+        .info form .row2 div{
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+        .info form .row2 div textarea{
+            padding: 10px;
+            border: 1px solid #86848c;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 14px;
+            color: var(--color-gray-light);
+            width: 100%;
+        }
+        .info form .row2 div input{
+            padding: 10px;
+            border: 1px solid #86848c;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 14px;
+            color: var(--color-gray-light);
+            width: 100%;
+        }
+        .info form .row div{
+            display: flex;
+            flex-direction: column;
+        }
+        .info form .row div label,
+        .info form .row2 div label{
+            font-size: 15px;
+            font-weight: 400;
+            margin-bottom: 5px;
+            color: var(--color-gray-light);
+        }
+        .info form .row div input,
+        .info form .row div select
+        {
+            padding: 10px;
+            border: 1px solid #86848c;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 14px;
+            color: var(--color-gray-light);
+            width: 300px;
+        }
+        .info form button {
+            padding: 10px 30px;
+            background: var(--color-primary);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+        .table-data{
+            background: var(--color-white);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        table{
+            width: 100%;
+            border: 1px solid blue;
+            margin-top: 10px;
+        }
+        table tr{
+            color: var(--color-white);
+        }
+        table tr th{
+            padding: 10px;
+            background: none;
+            color: var(--color-gray-dark);
+
+        }
+        table tr td{
+            padding: 5px;
+        }
+        
+
+    /* MEDIA QUERY FOR MOBILE PHONE */
+    @media screen and (max-width: 700px) {
+        .transactions .top {
+            grid-template-columns: 1fr;
+        }
+        .transactions .top .card {
+            margin: 0 10px 0 10px;
+            padding: 10px;
+        }
+        .transactions .cardDesktop{
+            display: none;
+        }
+        .transactions .cardPhone{
+            display: block;
+            margin: 30px 0;
+        }
+        
+    }
+</style>
+
+<section class="transactions">
+
+    <div class="top">
+
+        <div class="card">
+            <div class="header">
+                <div>
+                    <h6>Monthly Comparison</h6>
+                    <div class="row">
+                        <div class="first">
+                            <div></div>
+                            <p>This Year</p>
+                        </div>
+                        <div class="second">
+                            <div></div>
+                            <p>Last Year</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- chart -->
+                <canvas id="income"></canvas>
+                <!-- end of chart -->
+
+            </div>
+        </div>
+        <div class="comparisons">
+            <div class="row">
+                <div class="cat">
+                    <h6>This Month</h6>
+                    <h5>{{ total_income_this_month|intcomma }} Tsh.</h5>
+                    <p>Comparing to {{ total_income_last_month|intcomma }} Tsh Last Month</p>
+                </div>
+                <div class="cat">
+                    <h6>This Year</h6>
+                    <h5>{{ total_income_this_year|intcomma }} Tsh.</h5>
+                    <p>Comparing to {{ total_income_last_year|intcomma }} Tsh Last Year</p>
+                </div>
+            </div>
+            <div class="total">
+                <h6>Overall Total</h6>
+                <h5>{{ total_income|intcomma }} Tsh.</h5>
+            </div>
+        </div>
+       
+    </div>
+
+    <div class="table-data">
+        <!-- table data -->
+        <table>
+            <tr>
+                <th>Jan</th>
+                <th>Feb</th>
+                <th>March</th>
+                <th>Apr</th>
+                <th>May</th>
+                <th>Jun</th>
+                <th>Jly</th>
+                <th>Aug</th>
+                <th>Sept</th>
+                <th>Oct</th>
+                <th>Nov</th>
+                <th>Dec</th>
+            </tr>
+            <tr>
+                {% for month, total in monthly_payments_this_year %}
+                    <td style="background: rgb(242, 124, 124);">{{ total }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for month, total in monthly_payments_last_year %}
+                    <td style="background: rgb(128, 128, 249);">{{ total }}</td>
+                {% endfor %}
+            </tr>
+        </table>
+        <!-- end of table -->
+    </div>
+
+    <h5>Income Lists</h5>
+
+    <!-- desktop view --> 
+    <div class="cardDesktop">
+        <div class="header" style="padding: 30px 0;">
+            <li>Date</li>
+            <li>Category</li>
+            <li>Description</li>
+            <li>Amount</li>
+            <li>Processed By</li>
+        </div>
+
+        {% for x in all_incomes %}
+        <div class="data">
+            <li>{{x.issuedDate}}</li>
+            <li>{{x.project.title}}</li>
+            <li>
+                <h6>{{x.title}}</h6>
+                <p>{{x.description}}</p>
+            </li>
+            <li id="amount">{{x.amount|intcomma}}</li>
+            <li>{{x.processor.username}}</li>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- phone view -->
+    <div class="cardPhone">
+        <div class="phoneTable">
+            <div>
+                <li>Date:</li>
+                <p>{{x.issuedDate}}</p>
+            </div>
+            <div>
+                <li>Category:</li>
+                <p>{{x.project.title}}</p>
+            </div>
+            <div>
+                <li>Description:</li>
+                <span>
+                    <p>{{x.title}}</p>
+                    <p>{{x.description}}</p>
+                </span>
+            </div>
+            <div>
+                <li>Amount:</li>
+                <p>{{x.amount|intcomma}}</p>
+            </div>
+            <div>
+                <li>Processed:</li>
+                <p>{{x.processor.username}}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="add" id="openModalCategory">
+        <span class="material-icons-sharp">add</span>
+        Add Category
+    </div>  -->
+
+
+<!-- CHART -->
+
+
+
+    <!-- ############################################################ -->
+
+    <!-- ################################################################## -->
+
+
+    <!--Project Payment -->
+    <div id="category" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          
+          <section class="info">
+            
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h5>Add Expense</h5>
+    
+                <div class="row2">
+                    <div>
+                        <label for="desription">Title</label>
+                        <input type="text" name="title" style="width: 600px;"></input>
+                    </div>
+                </div>
+    
+                <div class="row2">
+                    <div>
+                        <label for="desription">Category Description</label>
+                        <textarea name="description" rows="4" style="width: 600px;"></textarea>
+                    </div>
+                </div>
+
+                <div class="row2">
+                    <div>
+                        <label for="desription">Amount</label>
+                        <input type="number" step="0.01" name="amount" style="width: 600px;"></input>
+                    </div>
+                </div>
+    
+                <button type="submit">Add Expense</button>
+            </form>
+          </section>
+    
+        </div>
+    </div>
+    
+    
+    <!--Basic info Script -->
+    <script>
+        // Get the modal
+        var modal = document.getElementById("category");
+      
+        // Get the button that opens the modal
+        var btn = document.getElementById("openModalCategory");
+      
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+      
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+      
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+      
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+    </script>
+
+
+<!--################################# chart ########################################################-->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Prepare data from Django context
+const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+const thisYearData = [
+    {% for month, total in monthly_payments_this_year %}
+        {{ total }},
+    {% endfor %}
+];
+
+const lastYearData = [
+    {% for month, total in monthly_payments_last_year %}
+        {{ total }},
+    {% endfor %}
+];
+
+// Create chart
+const chart = document.querySelector("#income").getContext('2d');
+
+new Chart(chart, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                label: 'This Year',
+                data: thisYearData,
+                borderColor: 'red',
+                borderWidth: 2
+            },
+            {
+                label: 'Last Year',
+                data: lastYearData,
+                borderColor: 'blue',
+                borderWidth: 2
+            }
+        ]
+    },
+    options: {
+        responsive: true
+    }
+});
+</script>
+<!--################################# end of chart ######################################## -->
+
+    
+    
+</section>
+
+{% endblock %}

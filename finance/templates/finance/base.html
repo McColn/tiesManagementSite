@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
+      rel="stylesheet">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="{% static 'app/home.css' %}">
+          <!-- Cleave.js CSS (optional, for styling) -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/addons/cleave-phone.us.css" />
+      <!-- Cleave.js JavaScript -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js"></script>
+</head>
+<body>
+
+    <!-- start of navbar -->
+    <nav>
+        <div class="container">
+            <img src="{% static 'app/images/logo1.png' %}" class="logo" alt="">
+            <div class="search-bar">
+                <span class="material-icons-sharp">search</span>
+                <input type="search" placeholder="search">
+            </div>
+            <div class="profile-area">
+                <div class="theme-btn">
+                    <span class="material-icons-sharp active">light_mode</span>
+                    <span class="material-icons-sharp">dark_mode</span>
+                </div>
+                <div class="profile">
+                    <div class="profile-photo">
+                        <img src="{% static 'app/images/profile-1.jpg' %}" alt="">
+                    </div>
+                    <h5>McColn Jr</h5>
+                    <span class="material-icons-sharp">expand_more</span>
+                </div>
+                <button id="menu-btn">
+                    <span class="material-icons-sharp">menu</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <!-- end of navbar -->
+
+    <main>
+        <!-- aside -->
+        <aside>
+            <button id="close-btn">
+                <span class="material-icons-sharp">close</span>
+            </button>
+
+            <div class="sidebar">
+                <a href="{% url 'overview' %}" class="active">
+                    <span class="material-icons-sharp">dashboard</span>
+                    <h4>Overview</h4>
+                </a>
+                <a href="{% url 'income' %}">
+                    <span class="material-icons-sharp">currency_exchange</span>
+                    <h4>Income</h4>
+                </a>
+                <a href="{% url 'expenses' %}">
+                    <span class="material-icons-sharp">currency_exchange</span>
+                    <h4>Expenses</h4>
+                </a>
+                <a href="{% url 'balance' %}">
+                    <span class="material-icons-sharp">account_balance_wallet</span>
+                    <h4>Balances</h4>
+                </a>
+                <a href="{% url 'transactions' %}">
+                    <span class="material-icons-sharp">payment</span>
+                    <h4>Transactions</h4>
+                </a>
+                <a href="{% url 'analytics' %}">
+                    <span class="material-icons-sharp">settings</span>
+                    <h4>Analytics & Report</h4>
+                </a>
+                
+            </div>
+
+            <div class="updates">
+                <span class="material-icons-sharp">update</span>
+                <h4>Updates Available</h4>
+                <p>Security Updates</p>
+                <p>General Updates</p>
+                <a href="{% url 'home' %}">Management</a>
+            </div>
+ 
+        </aside>
+        <!-- end of aside -->
+
+        {% block content %}
+
+        {% endblock %}
+
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js" integrity="sha512-GMGzUEevhWh8Tc/njS0bDpwgxdCJLQBWG3Z2Ct+JGOpVnEmjvNx6ts4v6A2XJf1HOrtOsfhv3hBKpK9kE5z8AQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{% static 'app/home.js' %}"></script>
+    
+</body>
+</html>

@@ -1,0 +1,220 @@
+{% extends 'finance/base2.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<style>
+    .incomeStatement{
+        padding: 10px 50px;
+    }
+    .incomeStatement h3{
+        text-align: center;
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--color-gray-dark);
+        margin: 10px;
+    }
+    .incomeStatement .selection{
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin: 10px;
+    }
+    .incomeStatement .selection div select{
+        width: 350px;
+        padding: 10px;
+    }
+    .incomeStatement .selection div option{
+        font-size: 16px;
+        font-weight: 600;
+    }
+    .incomeStatement .selection div button{
+        padding: 10px 30px;
+        color: var(--color-white);
+        background: var(--color-warning);
+        border-radius: 10px;
+    }
+    .statement{
+        background: var(--color-white);
+        padding: 20px;
+        margin: 40px 0px;
+    }
+    .statement .top{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .statement .top img{
+        height: 50px;
+        width: auto;
+    }
+    .statement .top div{
+        text-align: end;
+    }
+    .statement .top div h5{
+        font-size: 20px;
+        color: var(--color-primary);
+        font-weight: 800;
+    }
+    .statement .top div p{
+        font-size: 14px;
+        color: var(--color-gray-dark);
+        font-weight: 400;
+    }
+    .centre{
+        margin: 20px 0px;
+    }
+    .centre div{
+        display: grid;
+        grid-template-columns: 3fr 1fr 1fr;
+    }
+    .centre div#header{
+        background: var(--color-primary);
+        padding: 10px;
+        color: var(--color-white);
+        font-size: 18px;
+        font-weight: 600;
+    }
+    .centre div li{
+        font-size: 16px;
+        font-weight: 400;
+        margin: 10px 10px;
+        
+    }
+    .centre div li#data{
+        text-align: end;
+        font-weight: 600;
+    }
+    div#line{
+        height: 1px;
+        width: 100%;
+        background: var(--color-gray-dark);
+    }
+    div#subheader{
+        margin: 30px 0px 0px 0px;
+        background: var(--color-warning-light);
+        color: var(--color-dark);
+    }
+</style>
+
+<section class="incomeStatement">
+    <h3>Income Statement (Profit and Loss Statement)</h3>
+    <div class="selection">
+        <div>
+            <select name="month1">
+                <option value="">From</option>
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+            </select>
+        </div>
+        <div>
+            <select name="month2">
+                <option value="">To</option>
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+            </select>
+        </div>
+        <div>
+            <select name="year">
+                <option value="">Year</option>
+                <!-- Replace these values with the years you need -->
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+                <!-- Add more years as needed -->
+            </select>
+        </div>
+        <div>
+            <button>Filter</button>
+        </div>
+    </div>
+
+    <div class="statement">
+        <div class="top">
+            <img src="{% static 'app/images/logo1.png' %}" alt="">
+            <div>
+                <h5>Income Statement</h5>
+                <p>For the Year Ending [Dec 31,2024]</p>
+            </div>
+        </div>
+        <div class="centre">
+            <div id="subheader">
+                <li></li>
+                <li id="data">2024</li>
+                <li id="data">2023</li>
+            </div>
+            <div>
+                <li>Revenue</li>
+                <li id="data">13,000</li>
+                <li id="data">{{total_revenue}}</li>
+            </div>
+            <div>
+                <li>Cost of Goods Sold</li>
+                <li id="data">7,000</li>
+                <li id="data">{{total_cost_goods}}</li>
+            </div>
+            <div id="line"></div>
+            <div>
+                <li>Gross Profit</li>
+                <li id="data">7,890</li>
+                <li id="data">12,445</li>
+            </div>
+            
+
+            <div id="subheader">
+                <li>Less Expenses</li>
+            </div>
+            <div>
+                <li>Administrative Expenses</li>
+                <li id="data">7,890</li>
+                <li id="data">12,445</li>
+            </div>
+            <div>
+                <li>Financial Expenses</li>
+                <li id="data">7,890</li>
+                <li id="data">12,445</li>
+            </div>
+            <div>
+                <li>Depreciation and Amortization</li>
+                <li id="data">7,890</li>
+                <li id="data">12,445</li>
+            </div>
+            <div id="line"></div>
+            <div>
+                <li>Total Expenses</li>
+                <li id="data">7,890</li>
+                <li id="data">12,445</li>
+            </div>
+            <div id="header">
+                <li>Net Profit Before Tax</li>
+                <li id="data">7,890</li>
+                <li id="data">12,445</li>
+            </div>
+        </div>
+    </div>
+    
+</section>
+
+{% endblock %}

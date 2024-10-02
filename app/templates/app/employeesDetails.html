@@ -1,0 +1,889 @@
+{% extends 'app/base2.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .employee-detail {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 10px;
+        margin-top: 50px;
+    }
+    .employee-detail .left-detail {
+    }
+    .employee-detail .left-detail .card{
+        background: var(--color-white);
+        border-radius: 10px;
+    }
+    .employee-detail .left-detail .top {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        padding: 30px 20px;
+    }
+    .employee-detail .left-detail .top img {
+        height: 70px;
+        width: 70px;
+        border-radius: 50%;
+    }
+    .employee-detail .left-detail .top .name h5{
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--color-gray-light);
+    }
+    .employee-detail .left-detail .top .name h6{
+        font-size: 12px;
+        font-weight: 300;
+        color: var(--color-gray-light);
+    }
+    .employee-detail .left-detail .categories{
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 40px;
+    }
+    .cat1{
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        margin-top: 20px;
+        background: transparent;
+        padding: 15px;
+        border-radius: 10px;
+    }
+    .employee-detail .left-detail .categories .cat1:hover{
+        cursor: pointer;
+    }
+    .employee-detail .left-detail .categories .cat1#active{
+        background: var(--color-primary);
+    }
+    .employee-detail .left-detail .categories .cat1 span,
+    .employee-detail .left-detail .categories .cat1 p {
+        font-size: 18px;
+        font-weight: 400;
+        color: var(--color-gray-light);
+    }
+    .employee-detail .left-detail .categories .cat1#active span,
+    .employee-detail .left-detail .categories .cat1#active p {
+        color: var(--color-white);
+    }
+    .employee-detail .right-detail {
+        display: none;
+    }
+    .employee-detail .right-detail.active {
+        display: block;
+    }
+    .employee-detail .right-detail .card {
+        background: var(--color-white);
+    }
+    .employee-detail .right-detail .card .top{
+        display: flex;
+        justify-content: space-between;
+        padding: 30px 20px;
+        align-items: center;
+    }
+    .employee-detail .right-detail .card .top h5{
+        font-size: 16px;
+        color: var(--color-gray-light);
+    }
+    .employee-detail .right-detail .card .top a{
+        font-size: 16px;
+        color: var(--color-gray-light);
+        background: var(--color-primary);
+        color: var(--color-white);
+        padding: 10px 60px;
+        border-radius: 40px;
+    }
+    .employee-detail .right-detail .card .line {
+        height: 1px;
+        width: 96%;
+        background: var(--color-gray-light);
+        margin-left: 20px;
+        
+    }
+    .employee-detail .right-detail .card .bottom {
+        margin: 40px 20px;
+    }
+    .employee-detail .right-detail .card .bottom .row {
+        display: flex;
+        flex-direction: row;
+        gap: 80px;
+        padding-bottom: 20px;
+    }
+    .employee-detail .right-detail .card .bottom .row h5{
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: var(--color-gray-light);
+    }
+    .employee-detail .right-detail .card .bottom .row button{
+        /* border: 1px solid var(--color-gray-light); */
+        height: 50px;
+        width: 380px;
+        display: flex;
+        align-items: center;
+        border-radius: 0px;
+        background: #ececec;
+    }
+    .employee-detail .right-detail .card .bottom .row button h6{
+        font-size: 16px;
+        color: var(--color-gray-dark);
+        font-weight: 600; 
+        margin-left: 20px;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto; /* 15% from the top and centered */
+      padding: 20px;
+      border: 1px solid #888;
+      border-radius: 20px;
+      width: 60%; /* Could be more or less, depending on screen size */
+    }
+    .close,
+    .close2,
+    .close3,
+    .close4 {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus,
+    .close2:hover,
+    .close2:focus,
+    .close3:hover,
+    .close3:focus,
+    .close4:hover,
+    .close4:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* popup */
+    .info{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70vh;
+        }
+        .info h5{
+            font-size: 28px;
+            font-weight: 800;
+            text-align: center;
+            color: var(--color-gray-light);
+        }
+        .info form {
+            border: 1px dotted blue;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .info form .row{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 10px;
+        }
+        .info form .row div{
+            display: flex;
+            flex-direction: column;
+        }
+        .info form .row div label{
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--color-gray-light);
+        }
+        .info form .row div input{
+            padding: 10px;
+            border: 1px solid #86848c;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 14px;
+            color: var(--color-gray-light);
+            width: 300px;
+        }
+        .info form button {
+            padding: 10px 30px;
+            background: var(--color-primary);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+
+    /* MEDIA QUERY FOR MOBILE PHONE */
+    @media screen and (max-width: 700px) {
+        .employee-detail {
+            display: grid;
+            grid-template-columns:  1fr;
+            gap: 10px;
+            margin-top: 50px;
+        }
+        /* .employee-detail .left-detail .card {
+            width: 80%;
+        } */
+        .employee-detail .right-detail .card .bottom .row {
+            display: flex;
+            flex-direction: column;
+            gap: 80px;
+            padding-bottom: 20px;
+        }
+        .cat1 {
+            padding: 15px 0px;
+            width: 95%;
+        }
+        .employee-detail .right-detail .card .bottom .row {
+            gap: 20px;
+            
+        }
+        .employee-detail .right-detail .card .bottom .row button {
+            
+            width: 95%;
+        }
+        .employee-detail .left-detail .card,
+        .employee-detail .right-detail .card {
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+        .employee-detail .right-detail .card .line {
+            width: 86%;
+        }
+
+
+        /* popup */
+        .info{
+            height: auto;
+        }
+        .info form .row{
+            grid-template-columns: 1fr;
+        }
+        .info form .row div{
+            display: flex;
+            flex-direction: column;
+        }
+        .info form button {
+            width: 100%;
+        }
+
+        /* Modal styles */
+        
+        .modal-content {
+            width: 95%; 
+        }
+    }
+    
+    
+</style>
+
+<section class="employee-detail">
+
+    <div class="left-detail">
+        <div class="card">
+            <div class="top">
+                {% if employee.image %}
+                <img src="{{employee.image.url}}" alt="">
+                {% else %}
+                <img src="{% static 'app/images/profile-1.jpg' %}" alt="">
+                {% endif %}
+                <div class="name">
+                    <h5>{{employee.first_name}} {{employee.last_name}}</h5>
+                    <h6>{{employee.role}}</h6>
+                </div>
+            </div>
+            <div class="categories">
+                <div class="cat1" id="active" onclick="showContent('content1')">
+                    <span class="material-icons-sharp">person</span>
+                    <p>Basic info</p>
+                </div>
+                <div class="cat1" onclick="showContent('content2')">
+                    <span class="material-icons-sharp">info</span>
+                    <p>Personal info</p>
+                </div>
+                <div class="cat1" onclick="showContent('content3')">
+                    <span class="material-icons-sharp">school</span>
+                    <p>Education</p>
+                </div>
+                <div class="cat1" onclick="showContent('content4')">
+                    <span class="material-icons-sharp">badge</span>
+                    <p>Contract</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="right-detail active" id="content1">
+        <div class="card">
+            <div class="top">
+                <h5>Basic Info</h5>
+                <!-- <a href="{% url 'basicInfo' employee.id %}" id="openModalBasic">Edit</a> -->
+                <a href="#" id="openModalBasic">Edit</a>
+            </div>
+            <div class="line"></div>
+            <div class="bottom">
+                <div class="row">
+                    <div class="item">
+                        <h5>First name</h5>
+                        <button><h6>{{employee.first_name}}</h6></button> 
+                    </div>
+                    <div class="item">
+                        <h5>Middle name</h5>
+                        <button><h6>{{employee.middle_name}}</h6></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="item">
+                        <h5>Last name</h5>
+                        <button><h6>{{employee.last_name}}</h6></button> 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="item">
+                        <h5>Email</h5>
+                        <button><h6>{{employee.email}}</h6></button>
+                    </div>
+                    <div class="item">
+                        <h5>Phone</h5>
+                        <button><h6>{{employee.phone}}</h6></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="item">
+                        <h5>Gender</h5>
+                        <button><h6>{{employee.gender}}</h6></button>
+                    </div>
+                    <div class="item">
+                        <h5>Date of Birth</h5>
+                        <button><h6>{{employee.birthDate}}</h6></button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="right-detail" id="content2">
+        <div class="card">
+            <div class="top">
+                <h5>Personal Info</h5>
+                <a href="#" id="openModalPersonal">Edit</a>
+            </div>
+            <div class="line"></div>
+            <div class="bottom">
+                <div class="row">
+                    <div class="item">
+                        <h5>NIDA Number</h5>
+                        <button><h6>{{employee.nida}}</h6></button> 
+                    </div>
+                    <div class="item">
+                        <h5>Home Address</h5>
+                        <button><h6>{{employee.homeAdress}}</h6></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="item">
+                        <h3>Next Kin</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="item">
+                        <h5>Full name</h5>
+                        <button><h6>{{employee.nextKinName}}</h6></button> 
+                    </div>
+                    <div class="item">
+                        <h5>Relation</h5>
+                        <button><h6>{{employee.nextKinRelation}}</h6></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="item">
+                        <h5>Home Address</h5>
+                        <button><h6>{{employee.nextKinAddress}}</h6></button> 
+                    </div>
+                    <div class="item">
+                        <h5>Phone</h5>
+                        <button><h6>{{employee.nextKinPhone}}</h6></button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="right-detail" id="content3">
+        <div class="card">
+            <div class="top">
+                <h5>Education Info</h5>
+                <a href="#" id="openModalEducation">Edit</a>
+            </div>
+            <div class="line"></div>
+            <div class="bottom">
+                <div class="row">
+                    <div class="item">
+                        <h5>University Name</h5>
+                        <button><h6>{{employee.uniName}}</h6></button> 
+                    </div>
+                    <div class="item">
+                        <h5>Level </h5>
+                        <button><h6>{{employee.uniLevel}}</h6></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="item">
+                        <h5>Course</h5>
+                        <button><h6>{{employee.uniCourse}}</h6></button> 
+                    </div>
+                    <div class="item">
+                        <!-- <h5>Relation</h5>
+                        <button><h6>Father</h6></button> -->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="item">
+                        <h5>Start Year</h5>
+                        <button><h6>{{employee.startYear}}</h6></button> 
+                    </div>
+                    <div class="item">
+                        <h5>End Year</h5>
+                        <button><h6>{{employee.endYear}}</h6></button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="right-detail" id="content4">
+        <div class="card">
+            <div class="top">
+                <h5>Contract Info</h5>
+                <a href="#" id="openModalContract">Edit</a>
+            </div>
+            <div class="line"></div>
+            <div class="bottom">
+                <div class="row">
+                    <div class="item">
+                        <h5>Role Title</h5>
+                        <button><h6>{{employee.role}}</h6></button> 
+                    </div>
+                    <div class="item">
+                        <h5>Contract Duration </h5>
+                        <button><h6>{{employee.contractDuration}}</h6></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="item">
+                        <h5>Signed Date</h5>
+                        <button><h6>{{employee.signedDate}}</h6></button> 
+                    </div>
+                    <div class="item">
+                        <h5>Expire Date</h5>
+                        <button><h6>{{employee.expireDate}}</h6></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="item">
+                        <h5>Remain Duration</h5>
+                        <button><h6>{{employee.remainDuration}}</h6></button> 
+                    </div>
+                    <div class="item">
+                        <h5>Attachments</h5>
+                        <a href="{{employee.Attachment.url}}" download="filename.pdf" style="display: flex; align-items: center; margin-top: 10px;">
+                            <span class="material-icons-sharp">download</span>
+                            {{employee.Attachment.url}} attachment pdf
+                        </a>
+                        <!-- <button><h6>{{employee.Attachment}}</h6></button> -->
+                    </div>
+                </div>
+                <!-- <div class="row">
+                    <div class="item">
+                        <button style="background: aqua;"><h6>Renewal</h6></button> 
+                    </div>
+                    <div class="item">
+                        <button style="background: red;"><h6 style="color: white;">Terminate</h6></button> 
+                    </div>
+                    
+                </div> -->
+            </div>
+            
+        </div>
+    </div>
+    
+</section>
+
+
+<!--Basic info Modal -->
+<div id="basic" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      
+      <section class="info">
+        
+        <form action="{% url 'basicInfo' employee.id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h5>Edit User Basic Info</h5>
+            <div class="row">
+                <div>
+                    <label for="first_name">Firstname</label>
+                    <input type="text" name="first_name" value="{{employee.first_name}}">
+                </div>
+                <div>
+                    <label for="last_name">Lastname</label>
+                    <input type="text" name="last_name" value="{{employee.last_name}}">
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label for="middle_name">Middle name</label>
+                    <input type="text" name="middle_name" value="{{employee.middle_name}}">
+                </div>
+                <div>
+                    <label for="email">Email</label>
+                    <input type="text" name="email" value="{{employee.email}}">
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label for="username">Username</label>
+                    <input type="text" name="username" value="{{employee.username}}">
+                </div>
+                <div>
+                    <label for="gender">Gender</label>
+                    <input type="text" name="gender" value="{{employee.gender}}">
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label for="phone">Phone number</label>
+                    <input type="text" name="phone" value="{{employee.phone}}">
+                </div>
+                <div>
+                    <label for="birthDate">Birth Date</label>
+                    <input type="text" name="birthDate" id="date" placeholder="MM DD YYYY">
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label for="image">Profile Image</label>
+                    <input type="file" name="image">
+                </div> 
+            </div>
+            <button type="submit">Update</button>
+        </form>
+      </section>
+
+    </div>
+</div>
+
+<!--Personal info Modal -->
+<div id="personal" class="modal">
+    <div class="modal-content">
+      <span class="close2">&times;</span>
+      
+      <section class="info">
+        
+        <form action="{% url 'personalInfo' employee.id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h5>Edit User Personal Info</h5>
+            <div class="row">
+                <div>
+                    <label for="nextKinName">Nextkin fullname</label>
+                    <input type="text" name="nextKinName" value="{{employee.nextKinName}}">
+                </div>
+                <div>
+                    <label for="nextKinRelation">Nextkin Relation</label>
+                    <input type="text" name="nextKinRelation" value="{{employee.nextKinRelation}}">
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label for="nextKinAddress">Nextkin Address</label>
+                    <input type="text" name="nextKinAddress" value="{{employee.nextKinAddress}}">
+                </div>
+                <div>
+                    <label for="email">Email</label>
+                    <input type="text" name="email" value="{{employee.email}}">
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label for="nextKinPhone">NextKin Phone-number</label>
+                    <input type="text" name="nextKinPhone" value="{{employee.nextKinPhone}}">
+                </div>
+                <div>
+                    <label for="nida">Employee Nida</label>
+                    <input type="text" name="nida" value="{{employee.nida}}">
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label for="homeAdress">Employee HomeAdress</label>
+                    <input type="text" name="homeAdress" value="{{employee.homeAdress}}">
+                </div>
+                <div>
+                    <!-- <label for="birthDate">Birth Date</label>
+                    <input type="text" name="birthDate" id="date" placeholder="MM DD YYYY"> -->
+                </div>
+            </div>
+            
+            <button type="submit">Update</button>
+        </form>
+      </section>
+
+    </div>
+</div>
+
+<!--Education info Modal -->
+<div id="education" class="modal">
+    <div class="modal-content">
+      <span class="close3">&times;</span>
+      
+      <section class="info">
+        
+        <form action="{% url 'educationInfo' employee.id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h5>Edit User Education Info</h5>
+            <div class="row">
+                <div>
+                    <label for="uniName">University Name</label>
+                    <input type="text" name="uniName" value="{{employee.uniName}}">
+                </div>
+                <div>
+                    <label for="uniLevel">University Level</label>
+                    <input type="text" name="uniLevel" value="{{employee.uniLevel}}">
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label for="uniCourse">Course</label>
+                    <input type="text" name="uniCourse" value="{{employee.uniCourse}}">
+                </div>
+                <div>
+                    <label for="startYear">Start Year</label>
+                    <input type="text" name="startYear" value="{{employee.startYear}}">
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label for="endYear">End Year</label>
+                    <input type="text" name="endYear" value="{{employee.endYear}}">
+                </div>
+                
+            </div>
+            
+            
+            <button type="submit">Update</button>
+        </form>
+      </section>
+
+    </div>
+</div>
+
+<!--Conract info Modal -->
+<div id="contract" class="modal">
+    <div class="modal-content">
+      <span class="close4">&times;</span>
+      
+      <section class="info">
+        
+        <form action="{% url 'contractInfo' employee.id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h5>Edit User Contract Info</h5>
+            <div class="row">
+                <div>
+                    <label for="role">Role</label>
+                    <input type="text" name="role" value="{{employee.role}}">
+                </div>
+                <div>
+                    <label for="signedDate">Signed Date</label>
+                    <input type="date" name="signedDate" value="{{employee.signedDate}}">
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label for="expireDate">Expire Date</label>
+                    <input type="date" id="date" name="expireDate">
+                </div>
+                <div>
+                    <label for="attachment">Attachment</label>
+                    <input type="file" name="attachment">
+                </div>
+            </div>
+            
+            
+            
+            <button type="submit">Update</button>
+        </form>
+      </section>
+
+    </div>
+</div>
+
+
+
+ 
+<!--Basic info Script -->
+<script>
+    // Get the modal
+    var modal = document.getElementById("basic");
+  
+    // Get the button that opens the modal
+    var btn = document.getElementById("openModalBasic");
+  
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+  
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+  
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+</script>
+
+<!--Personal info Script -->
+<script>
+    // Get the modal
+    var modal2 = document.getElementById("personal");
+  
+    // Get the button that opens the modal
+    var btn2 = document.getElementById("openModalPersonal");
+  
+    // Get the <span> element that closes the modal
+    var span2 = document.getElementsByClassName("close2")[0];
+  
+    // When the user clicks the button, open the modal 
+    btn2.onclick = function() {
+      modal2.style.display = "block";
+    }
+  
+    // When the user clicks on <span> (x), close the modal
+    span2.onclick = function() {
+      modal2.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal2) {
+        modal2.style.display = "none";
+      }
+    }
+</script>
+
+<!--Education info Script -->
+<script>
+    // Get the modal
+    var modal3 = document.getElementById("education");
+  
+    // Get the button that opens the modal
+    var btn3 = document.getElementById("openModalEducation");
+  
+    // Get the <span> element that closes the modal
+    var span3 = document.getElementsByClassName("close3")[0];
+  
+    // When the user clicks the button, open the modal 
+    btn3.onclick = function() {
+      modal3.style.display = "block";
+    }
+  
+    // When the user clicks on <span> (x), close the modal
+    span3.onclick = function() {
+      modal3.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal3) {
+        modal3.style.display = "none";
+      }
+    }
+</script>
+
+<!--Contract info Script -->
+<script>
+    // Get the modal
+    var modal4 = document.getElementById("contract");
+  
+    // Get the button that opens the modal
+    var btn4 = document.getElementById("openModalContract");
+  
+    // Get the <span> element that closes the modal
+    var span4 = document.getElementsByClassName("close4")[0];
+  
+    // When the user clicks the button, open the modal 
+    btn4.onclick = function() {
+      modal4.style.display = "block";
+    }
+  
+    // When the user clicks on <span> (x), close the modal
+    span4.onclick = function() {
+      modal4.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal4) {
+        modal4.style.display = "none";
+      }
+    }
+</script>
+
+
+<script>
+    function showContent(contentId) {
+    // Hide all content
+    const contents = document.querySelectorAll('.right-detail');
+    contents.forEach(content => content.classList.remove('active'));
+
+    // Remove active class from all categories
+    const categories = document.querySelectorAll('.cat1');
+    categories.forEach(category => category.classList.remove('active'));
+
+    // Show the selected content
+    const selectedContent = document.getElementById(contentId);
+    if (selectedContent) {
+        selectedContent.classList.add('active');
+    }
+
+    // Add active class to the clicked category
+    const activeCategory = [...categories].find(category => category.getAttribute('onclick').includes(contentId));
+    if (activeCategory) {
+        activeCategory.classList.add('active');
+    }
+}
+
+// Set the default active category and content
+document.addEventListener('DOMContentLoaded', () => {
+    showContent('content1'); // Set the default content to display
+});
+
+
+</script>
+
+
+
+
+{% endblock %}
