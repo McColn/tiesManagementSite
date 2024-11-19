@@ -34,6 +34,7 @@ urlpatterns = [
     path('assignmentDetailsAdd/<int:assignment_id>/', views.assignmentDetailsAdd, name='assignmentDetailsAdd'),
 
     path('leaves/', views.leaves, name='leaves'),
+    path('leavesletter/<int:id>/', views.leavesletter, name='leavesletter'),
     path('leavesRequest/', views.leavesRequest, name='leavesRequest'),
     path('leavesDetails/<int:id>/', views.leavesDetails, name='leavesDetails'),
     path('leavesActions/<int:id>/', views.leavesActions, name='leavesActions'),
@@ -41,5 +42,14 @@ urlpatterns = [
     path('user/details/', user_details, name='user_details'),
     path('calendar/', views.calendar_view, name='calendar'),
     path('company/', views.company, name='company'),
+    path('companyPdfAdd/', views.companyPdfAdd, name='companyPdfAdd'),
+    path('salaryAdvance/', views.salaryAdvance, name='salaryAdvance'),
+    path('advanceRequest/', views.advanceRequest, name='advanceRequest'),
+    path('salaryAdvanceActions/<int:id>/', views.salaryAdvanceActions, name='salaryAdvanceActions'),
+    path('salaryAdvanceDetails/<int:id>/', views.salaryAdvanceDetails, name='salaryAdvanceDetails'),
+
+    path('salarymccoln/', views.salarymccoln, name='salarymccoln'),
+
+
 
 ]

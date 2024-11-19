@@ -16,4 +16,5 @@ urlpatterns = [
     path('expensesAdd/<int:project_id>/', views.expensesAdd, name='expensesAdd'),
     path('analytics/', views.analytics, name='analytics'),
     path('incomeStatement/', views.incomeStatement, name='incomeStatement'),
+    path('balanceSheet/', views.balanceSheet, name='balanceSheet'),
 ]

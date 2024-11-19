@@ -368,6 +368,37 @@
        
     </div>
 
+    <div class="table-data">
+        <!-- table data -->
+        <table>
+            <tr>
+                <th>Jan</th>
+                <th>Feb</th>
+                <th>March</th>
+                <th>Apr</th>
+                <th>May</th>
+                <th>Jun</th>
+                <th>Jly</th>
+                <th>Aug</th>
+                <th>Sept</th>
+                <th>Oct</th>
+                <th>Nov</th>
+                <th>Dec</th>
+            </tr>
+            <tr>
+                {% for month, total in monthly_expenses_current_year.items %}
+                    <td style="background: rgb(242, 124, 124);">{{ total }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for month, total in monthly_expenses_last_year.items %}
+                    <td style="background: rgb(128, 128, 249);">{{ total }}</td>
+                {% endfor %}
+            </tr>
+        </table>
+        <!-- end of table -->
+    </div>
+
     <h5>{{ category.title }} Expenses Lists</h5>
 
     <!-- desktop view -->
@@ -431,20 +462,6 @@
     </div>
 
 
-
-    <!-- ############################################################ -->
-    <div>
-        <h3>Monthly Totals for This Year</h3>
-        {% for month, total in monthly_expenses_current_year.items %}
-            <p>{{ month }}: {{ total }} Tsh</p>
-        {% endfor %}
-    
-        <h3>Monthly Totals for Last Year</h3>
-        {% for month, total in monthly_expenses_last_year.items %}
-            <p>{{ month }}: {{ total }} Tsh</p>
-        {% endfor %}
-    </div>
-    <!-- ################################################################## -->
 
     <!--Project Payment -->
     <div id="category" class="modal">

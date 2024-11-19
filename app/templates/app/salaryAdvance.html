@@ -1,0 +1,417 @@
+{% extends 'app/base2.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    h5{
+        font-size: 30px;
+        font-weight: 600;
+    }
+    h6{
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--color-gray-light);
+    }
+    p{
+        font-size: 14px;
+        font-weight: 300;
+        color: var(--color-gray-dark);
+    }
+    .salary{
+    margin: 30px 10px;
+    padding: 20px;
+    background: var(--color-white);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.salary .top{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+.salary .top .card{
+    background: var(--color-white);
+    padding: 10px;
+    border: 1px solid var(--color-gray-light);
+    border-radius: 10px;
+}
+.salary h6{
+    margin: 30px 0px 10px 0px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-gray-light);
+}
+    table{
+    width: 100%;
+    background: var(--color-white);
+    border-collapse: collapse;
+}
+table tr th{
+    border: 1px solid var(--color-gray-dark);
+    text-align: start;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 600;
+}
+table tr td{
+    border: 1px solid var(--color-gray-dark);
+    text-align: start;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--color-gray-dark);
+}
+table tr td button{
+    padding: 10px;
+    background: var(--color-white);
+    border: none;
+    cursor: pointer;
+}
+
+
+
+    textarea{
+        width: 700px;
+        border: 1px solid var(--color-primary);
+    }
+    /* add btn */
+    .add{
+        padding: 10px 25px;
+        border: 1px dashed var(--color-primary);
+        color: var(--color-primary);
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        bottom: 50px;
+        right: 30px;
+        cursor: pointer;
+    }
+    
+    .add:hover{
+        background: var(--color-primary);
+        color: var(--color-white);
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      transition: all 300ms ease;
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto; /* 15% from the top and centered */
+      padding: 20px;
+      border: 1px solid #888;
+      border-radius: 10px;
+      width: 50%; /* Could be more or less, depending on screen size */
+    }
+    .close,
+    .close2,
+    .close3,
+    .close4 {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus,
+    .close2:hover,
+    .close2:focus,
+    .close3:hover,
+    .close3:focus,
+    .close4:hover,
+    .close4:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* popup */
+    .info{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            padding: 20px;
+        }
+        .info h5{
+            font-size: 22px;
+            font-weight: 600;
+            text-align: center;
+            color: var(--color-gray-light);
+            margin-bottom: 10px;
+        }
+        .info form {
+            /* border: 1px dotted blue; */
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .info form .row{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 10px;
+        }
+        .info form .row div{
+            display: flex;
+            flex-direction: column;
+        }
+        .info form .row div label{
+            font-size: 15px;
+            font-weight: 400;
+            margin-bottom: 5px;
+            color: var(--color-gray-light);
+        }
+        .info form .row div input,
+        .info form .row div select
+        {
+            padding: 10px;
+            border: 1px solid var(--color-primary);
+            border-radius: 5px;
+            background: transparent;
+            font-size: 14px;
+            color: var(--color-gray-light);
+            width: 300px;
+        }
+        .info form button {
+            padding: 10px 30px;
+            background: var(--color-primary);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+
+</style>
+
+<section class="salary">
+    <div class="top">
+        <div class="card">
+            <h5>03</h5>
+            <h6>This Month</h6>
+        </div>
+        <div class="card">
+            <h5>03</h5>
+            <h6>Processed</h6>
+        </div>
+        <div class="card">
+            <h5>03</h5>
+            <h6>Pending</h6>
+        </div>
+        <div class="card">
+            <h5>03</h5>
+            <h6>Overall Total</h6>
+        </div>
+    </div>
+
+    <h6>This Month - Salary Advance</h6>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Requested Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Process</th>
+        </tr>
+
+        {% for i in this_month_records %}
+        <tr>
+            <td>{{i.name.first_name}} {{i.name.last_name}}</td>
+            <td>{{i.date_applied}}</td>
+            <td>{{i.amount}}</td>
+            <td>{{i.status}}</td>
+            <!-- <td> <button id="openModalPersonal">Action</button></td> -->
+            <td><a href="{% url 'salaryAdvanceDetails' i.id %}">Action</a></td>
+
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h6>History - Salary Advance</h6>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Requested Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Process</th>
+        </tr>
+
+        {% for i in past_records %}
+        <tr>
+            <td>{{i.name.first_name}} {{i.name.last_name}}</td>
+            <td>{{i.date_applied}}</td>
+            <td>{{i.amount}}</td>
+            <td><button>{{i.status}}</button></td>
+            <td><a href="{% url 'salaryAdvanceDetails' i.id %}">Action</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    
+    <div>
+        <div class="add" id="openModalBasic">
+            <span class="material-icons-sharp">add</span>
+            Request Advance
+        </div>
+    </div>
+
+
+
+
+            <!--Project Add -->
+<div id="basic" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      
+      <section class="info">
+        
+        <form action="{% url 'advanceRequest' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h5>Salary Advance Request Form</h5>
+            <div class="row">
+                <div>
+                    <label for="client">Amount</label>
+                    <input type="number" name="amount">
+                    <!-- <select class="form-control" name="assigned_to" required>
+                        <option value=""> -- </option>
+                        {% for x in employee %}
+                            <option value="{{ x.id }}">
+                                {{ x.username }}
+                            </option>
+                        {% endfor %}
+                    </select> -->
+                </div>
+                <div>
+                    <label for="startDate">Transaction Type</label>
+                    <select class="form-control" name="typeOf" required>
+                        <option value=""> -- </option>
+                            <option value="Advance">Advance</option>
+                            <option value="Advance">Loan</option>
+                    </select>
+                </div>
+                
+            </div>
+            
+            <!-- <div class="row">
+                <div>
+                    <label for="startDate">Assignment Descriptions</label>
+                    <textarea name="description" id="" rows="5"></textarea>
+                </div>
+            </div> -->
+            
+            <button type="submit">Submit Request</button>
+        </form>
+      </section>
+
+    </div>
+</div>
+
+<!--Budget Modal -->
+<div id="personal" class="modal">
+    <div class="modal-content">
+      <span class="close2">&times;</span>
+      
+      <section class="info">
+        
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h5>Add Budget</h5>
+            <div class="row">
+                <div>
+                    <label for="startDate">Process Advance Salary</label>
+                    <select class="form-control" name="typeOf" required>
+                        <option value=""> -- </option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Denied">Denied</option>
+                    </select>
+                </div>
+                
+            </div>
+            <div class="row2">
+                <div>
+                    <label for="desription">If any Comment</label>
+                    <textarea name="desription" rows="4"></textarea>
+                </div>
+            </div>
+            
+            <button type="submit">Add Budget</button>
+        </form>
+
+      </section>
+
+    </div>
+</div>
+
+<!--Basic info Script -->
+<script>
+    // Get the modal
+    var modal = document.getElementById("basic");
+  
+    // Get the button that opens the modal
+    var btn = document.getElementById("openModalBasic");
+  
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+  
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+  
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+</script>
+
+<!--Personal info Script -->
+<script>
+    // Get the modal
+    var modal2 = document.getElementById("personal");
+  
+    // Get the button that opens the modal
+    var btn2 = document.getElementById("openModalPersonal");
+  
+    // Get the <span> element that closes the modal
+    var span2 = document.getElementsByClassName("close2")[0];
+  
+    // When the user clicks the button, open the modal 
+    btn2.onclick = function() {
+      modal2.style.display = "block";
+    }
+  
+    // When the user clicks on <span> (x), close the modal
+    span2.onclick = function() {
+      modal2.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal2) {
+        modal2.style.display = "none";
+      }
+    }
+</script>
+</section>
+
+{% endblock %}

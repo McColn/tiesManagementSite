@@ -1,5 +1,6 @@
 {% extends 'finance/base.html' %}
 {% load static %}
+{% load humanize %}
 {% block content %}
 
 
@@ -19,12 +20,12 @@
                     <div class="top">
                         <div class="left">
                             <img src="{% static 'app/images/BTC.png' %}" alt="">
-                            <h2>BTC</h2>
+                            <h2>TOTAL-INCOME</h2>
                         </div>
                         <img src="{% static 'app/images/visa.png' %}" alt="" class="right">
                     </div>
                     <div class="middle">
-                        <h1>$827,199</h1>
+                        <h1>{{total_income|intcomma}}</h1>
                         <div class="chip">
                             <img src="{% static 'app/images/card chip.png' %}" alt="">
                         </div>
@@ -32,16 +33,16 @@
                     <div class="bottom">
                         <div class="left">
                             <small>Card Holder</small>
-                            <h5>JOHN DOE</h5>
+                            <h5>TIES</h5>
                         </div>
                         <div class="right">
                             <div class="expiry">
-                                <small>Expiry</small>
-                                <h5>08/23 </h5>
+                                <small>Year</small>
+                                <h5>2024 </h5>
                             </div>
                             <div class="cvv">
-                                <small>CVV</small>
-                                <h5>123</h5>
+                                <small>##</small>
+                                <h5>--</h5>
                             </div>
                         </div>
                     </div>
@@ -52,12 +53,12 @@
                     <div class="top">
                         <div class="left">
                             <img src="{% static 'app/images/ETH.png' %}" alt="">
-                            <h2>ETH</h2>
+                            <h2>TOTAL-EXPENSES</h2>
                         </div>
                         <img src="{% static 'app/images/visa.png' %}" alt="" class="right">
                     </div>
                     <div class="middle">
-                        <h1>$827,199</h1>
+                        <h1>{{total_expenses_overall|intcomma}}</h1>
                         <div class="chip">
                             <img src="{% static 'app/images/master card.png' %}" alt="">
                         </div>
@@ -65,16 +66,16 @@
                     <div class="bottom">
                         <div class="left">
                             <small>Card Holder</small>
-                            <h5>JOHN DOE</h5>
+                            <h5>TIES</h5>
                         </div>
                         <div class="right">
                             <div class="expiry">
-                                <small>Expiry</small>
-                                <h5>08/23 </h5>
+                                <small>Year</small>
+                                <h5>2024 </h5>
                             </div>
                             <div class="cvv">
-                                <small>CVV</small>
-                                <h5>123</h5>
+                                <small>##</small>
+                                <h5>--</h5>
                             </div>
                         </div>
                     </div>
@@ -85,12 +86,12 @@
                     <div class="top">
                         <div class="left">
                             <img src="{% static 'app/images/BTC.png' %}" alt="">
-                            <h2>BTC</h2>
+                            <h2>TOTAL-REVENUE</h2>
                         </div>
                         <img src="{% static 'app/images/visa.png' %}" alt="" class="right">
                     </div>
                     <div class="middle">
-                        <h1>$827,199</h1>
+                        <h1>{{total_revenue|intcomma}}</h1>
                         <div class="chip">
                             <img src="{% static 'app/images/card chip.png' %}" alt="">
                         </div>
@@ -99,16 +100,16 @@
                     <div class="bottom">
                         <div class="left">
                             <small>Card Holder</small>
-                            <h5>JOHN DOE</h5>
+                            <h5>TIES</h5>
                         </div>
                         <div class="right">
                             <div class="expiry">
-                                <small>Expiry</small>
-                                <h5>08/23 </h5>
+                                <small>Year</small>
+                                <h5>2024 </h5>
                             </div>
                             <div class="cvv">
-                                <small>CVV</small>
-                                <h5>123</h5>
+                                <small>##</small>
+                                <h5>--</h5>
                             </div>
                         </div>
                     </div>
@@ -116,155 +117,141 @@
 
             </div>
 
-            <!-- monthly report -->
-             <div class="monthly-report">
-                <div class="report">
-                    <h3>Income</h3>
-                    <div>
-                        <details>
-                            <h1>$29,023</h1>
-                            <h6 class="success">+3.5%</h6>
-                        </details>
-                        <p class="text-muted">Compared to $26,938 last month</p>
-                    </div>
-                </div>
-                <div class="report">
-                    <h3>Expenses</h3>
-                    <div>
-                        <details>
-                            <h1>$29,023</h1>
-                            <h6 class="sucess">+3.5%</h6>
-                        </details>
-                        <p class="text-muted">Compared to $26,938 last month</p>
-                    </div>
-                </div>
-                <div class="report">
-                    <h3>Cashback</h3>
-                    <div>
-                        <details>
-                            <h1>$29,023</h1>
-                            <h6 class="danger">-3.5%</h6>
-                        </details>
-                        <p class="text-muted">Compared to $26,938 last month</p>
-                    </div>
-                </div>
-                <div class="report">
-                    <h3>Turnover</h3>
-                    <div>
-                        <details>
-                            <h1>$29,023</h1>
-                            <h6 class="sucess">+3.5%</h6>
-                        </details>
-                        <p class="text-muted">Compared to $26,938 last month</p>
-                    </div>
-                </div>
-             </div>
+
 
 
               <!-- CHART -->
-               <canvas id="chart"></canvas>
+               <canvas id="chart1"></canvas>
+
+               
+
+
+               <!-- tables -->
+
+               <div class="table-data">
+                <!-- table data -->
+                 <h5>Income</h5>
+                <table>
+                    <tr>
+                        <th>Jan</th>
+                        <th>Feb</th>
+                        <th>March</th>
+                        <th>Apr</th>
+                        <th>May</th>
+                        <th>Jun</th>
+                        <th>Jly</th>
+                        <th>Aug</th>
+                        <th>Sept</th>
+                        <th>Oct</th>
+                        <th>Nov</th>
+                        <th>Dec</th>
+                    </tr>
+                    <tr>
+                        {% for month, total in monthly_payments_this_year %}
+                            <td style="background: rgb(242, 124, 124);">{{ total }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for month, total in monthly_payments_last_year %}
+                            <td style="background: rgb(128, 128, 249);">{{ total }}</td>
+                        {% endfor %}
+                    </tr>
+                </table>
+                <!-- end of table -->
+            </div>
+
+
+            <div class="table-data">
+                <!-- table data -->
+                 <h5>Expenses</h5>
+                <table>
+                    <tr>
+                        <th>Jan</th>
+                        <th>Feb</th>
+                        <th>March</th>
+                        <th>Apr</th>
+                        <th>May</th>
+                        <th>Jun</th>
+                        <th>Jly</th>
+                        <th>Aug</th>
+                        <th>Sept</th>
+                        <th>Oct</th>
+                        <th>Nov</th>
+                        <th>Dec</th>
+                    </tr>
+                    <tr>
+                        {% for month, total in monthly_expenses_current_year.items %}
+                            <td style="background: rgb(242, 124, 124);">{{ total }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for month, total in monthly_expenses_last_year.items %}
+                            <td style="background: rgb(128, 128, 249);">{{ total }}</td>
+                        {% endfor %}
+                    </tr>
+                </table>
+                <!-- end of table -->
+            </div>
+
+
          </section>
         <!-- end of middle -->
+
+        <!-- tables -->
+         
 
         <!-- start of right -->
          <section class="right">
             <div class="investments">
                 <div class="header">
-                    <h2>Investments</h2>
-                    <a href="#">
+                    <h2>Expenses</h2>
+                    <a href="{% url 'expenses' %}">
                         More
                         <span class="material-icons-sharp">chevron_right</span>
                     </a>
                 </div>
 
+                {% for i in first_four_expenses %}
                 <div class="investment">
                     <img src="images/uniliver.png" alt="">
-                    <h4>Uniliver</h4>
+                    <h4>{{i.category.title}}</h4>
                     <div class="date-time">
-                        <p>7 Nov, 2021</p>
-                        <small class="text-muted">9:14pm</small>
+                        <p>{{ i.expenseDate|date:"Y-m-d" }}</p> 
+                        <small class="text-muted">{{ i.expenseDate|time:"h:i A" }}</small>
                     </div>
                     <div class="bonds">
-                        <p>1402</p>
+                        <p>{{i.title}}</p>
                         <small class="text-muted">Bonds</small>
                     </div>
                     <div class="amount">
-                        <h4>$20,033</h4>
-                        <small class="danger">-4.27%</small>
+                        <h4>{{i.amount}}</h4>
+                        <small class="danger"></small>
                     </div>
                 </div>
+                {% endfor %}
 
-                <div class="investment">
-                    <img src="images/tesla.png" alt="">
-                    <h4>Tesla</h4>
-                    <div class="date-time">
-                        <p>7 Nov, 2021</p>
-                        <small class="text-muted">9:14pm</small>
-                    </div>
-                    <div class="bonds">
-                        <p>1402</p>
-                        <small class="text-muted">Bonds</small>
-                    </div>
-                    <div class="amount">
-                        <h4>$20,033</h4>
-                        <small class="danger">-4.27%</small>
-                    </div>
-                </div>
-
-                <div class="investment">
-                    <img src="images/mcdonalds.png" alt="">
-                    <h4>Uniliver</h4>
-                    <div class="date-time">
-                        <p>7 Nov, 2021</p>
-                        <small class="text-muted">9:14pm</small>
-                    </div>
-                    <div class="bonds">
-                        <p>1402</p>
-                        <small class="text-muted">Bonds</small>
-                    </div>
-                    <div class="amount">
-                        <h4>$20,033</h4>
-                        <small class="danger">-4.27%</small>
-                    </div>
-                </div>
-
-                <div class="investment">
-                    <img src="images/uniliver.png" alt="">
-                    <h4>Uniliver</h4>
-                    <div class="date-time">
-                        <p>7 Nov, 2021</p>
-                        <small class="text-muted">9:14pm</small>
-                    </div>
-                    <div class="bonds">
-                        <p>1402</p>
-                        <small class="text-muted">Bonds</small>
-                    </div>
-                    <div class="amount">
-                        <h4>$20,033</h4>
-                        <small class="success">+4.27%</small>
-                    </div>
-                </div>
 
             </div>
 
 
             <div class="recent-transactions">
                 <div class="header">
-                    <h2>Recent Transactions</h2>
-                    <a href="#">
+                    <h2>Recent Income</h2>
+                    <a href="{% url 'income' %}">
                         More
                         <span class="material-icons-sharp">headphones</span>
                     </a>
                 </div>
 
+                {% for i in first_four_income %}
                 <div class="transaction">
                     <div class="service">
                         <div class="icon bg-purple-light">
                             <span class="material-icons-sharp purple">headphones</span>
                         </div>
                         <div class="details">
-                            <h4>Music</h4>
-                            <p>20.11.2021</p>
+                            <h4>{{i.project.title}}</h4>
+                            <p>{{i.issuedDate|date:"Y-m-d"}}</p>
                         </div>
                     </div>
                     <div class="card-details">
@@ -272,83 +259,64 @@
                             <img src="images/visa.png" alt="">
                         </div>
                         <div class="details">
-                            <p>*2757</p>
-                            <small class="text-muted">Credit Card</small>
+                            <p>{{i.title}}</p>
+                            <small class="text-muted">{{i.processor.username}}</small>
                         </div>
                     </div>
-                    <h4>$20</h4>
+                    <h4>{{i.amount}}</h4>
                 </div>
+                {% endfor %}
 
-                <div class="transaction">
-                    <div class="service">
-                        <div class="icon bg-purple-light">
-                            <span class="material-icons-sharp">shopping_bag</span>
-                        </div>
-                        <div class="details">
-                            <h4>Shopping</h4>
-                            <p>20.11.2021</p>
-                        </div>
-                    </div>
-                    <div class="card-details">
-                        <div class="card bg-primary">
-                            <img src="images/visa.png" alt="">
-                        </div>
-                        <div class="details">
-                            <p>*2757</p>
-                            <small class="text-muted">Credit Card</small>
-                        </div>
-                    </div>
-                    <h4>$20</h4>
-                </div>
-
-                <div class="transaction">
-                    <div class="service">
-                        <div class="icon bg-purple-light">
-                            <span class="material-icons-sharp purple">headphones</span>
-                        </div>
-                        <div class="details">
-                            <h4>Music</h4>
-                            <p>20.11.2021</p>
-                        </div>
-                    </div>
-                    <div class="card-details">
-                        <div class="card bg-danger">
-                            <img src="images/visa.png" alt="">
-                        </div>
-                        <div class="details">
-                            <p>*2757</p>
-                            <small class="text-muted">Credit Card</small>
-                        </div>
-                    </div>
-                    <h4>$20</h4>
-                </div>
-
-                <div class="transaction">
-                    <div class="service">
-                        <div class="icon bg-purple-light">
-                            <span class="material-icons-sharp">headphones</span>
-                        </div>
-                        <div class="details">
-                            <h4>Music</h4>
-                            <p>20.11.2021</p>
-                        </div>
-                    </div>
-                    <div class="card-details">
-                        <div class="card bg-danger">
-                            <img src="images/visa.png" alt="">
-                        </div>
-                        <div class="details">
-                            <p>*2757</p>
-                            <small class="text-muted">Credit Card</small>
-                        </div>
-                    </div>
-                    <h4>$20</h4>
-                </div>
 
                 
             </div>
          </section>
         <!-- end of right -->
 
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <script>
+            // Prepare data from Django context
+            const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            const thisYearData = [
+                {% for month, total in monthly_payments_this_year %}
+                    {{ total }},
+                {% endfor %}
+            ];
+            
+            const lastYearData = [
+                {% for month, total in monthly_expenses_current_year.items %}
+                    {{ total }},
+                {% endfor %}
+            ];
+            
+            // Create chart
+            const chart = document.querySelector("#chart1").getContext('2d');
+            
+            new Chart(chart, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Income',
+                            data: thisYearData,
+                            borderColor: 'red',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Expenses',
+                            data: lastYearData,
+                            borderColor: 'blue',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+            </script>
 
 {% endblock %}

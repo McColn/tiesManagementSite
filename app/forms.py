@@ -17,7 +17,7 @@ class PersonalInfoForm(forms.ModelForm):
         model = CustomUser
         fields = [
                   'nextKinName','nextKinRelation','nextKinAddress',
-                  'nextKinPhone','nida','homeAdress'
+                  'nextKinPhone','nida','homeAddress'
                   ]
         
 class EducationInfoForm(forms.ModelForm):
@@ -72,7 +72,7 @@ class ProjectExpensesForm(forms.ModelForm):
     class Meta:
         model = ProjectExpense
         fields = [
-                  'title','desription',
+                  'title','description',
                   'amount'
                   ]
         
@@ -80,7 +80,7 @@ class ProjectBudgetForm(forms.ModelForm):
     class Meta:
         model = ProjectBudget
         fields = [
-                  'title','desription',
+                  'title','description',
                   'amount'
                   ]
 
@@ -88,7 +88,7 @@ class ProjectInvoiceForm(forms.ModelForm):
     class Meta:
         model = ProjectInvoice
         fields = [
-                  'title','desription',
+                  'title','description',
                   'amount'
                   ]
 
@@ -104,7 +104,7 @@ class ProjectUpdateForm(forms.ModelForm):
     class Meta:
         model = ProjectUpdate
         fields = [
-                  'desription'
+                  'description'
                   ]
         
 class AssignmentAddForm(forms.ModelForm):
@@ -135,4 +135,25 @@ class LeavesActionForm(forms.ModelForm):
         model = Leaves
         fields = [
                   'action','action_reason'
+                  ]
+        
+class SalaryAdvanceForm(forms.ModelForm):
+    class Meta:
+        model = SalaryAdvance
+        fields = [
+                  'typeOf','amount'
+                  ]
+        
+class SalaryAdvanceActionForm(forms.ModelForm):
+    class Meta:
+        model = SalaryAdvance
+        fields = [
+                  'status'
+                  ]
+        
+class CompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = [
+                  'title','category','pdfFile'
                   ]

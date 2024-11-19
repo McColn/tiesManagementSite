@@ -81,6 +81,12 @@
         background: var(--color-primary);
         color: var(--color-white);
     }
+    .leaves .leaves-body table tr td .no_back{
+        padding: 5px 10px;
+        cursor: pointer;
+        background: none;
+        color: var(--color-dark);
+    }
 
 
     /* Modal styles */
@@ -245,6 +251,7 @@
                 <td>{{i.endDate}}</td>
                 <td><span>{{i.action}}</span></td>
                 <td><a href="{% url 'leavesDetails' i.id %}">Process</a></td>
+                <td><a href="{% url 'leavesletter' i.id %}" class="no_back"><span class="material-icons-sharp">visibility</span></a></td>
             </tr>
             {% endfor %}
             
@@ -366,6 +373,7 @@
                 <td>{{i.endDate}}</td>
                 <td><span>{{i.action}}</span></td>
                 <td><a href="{% url 'leavesDetails' i.id %}">Process</a></td>
+                <td><span class="material-icons-sharp">visibility</span></td>
             </tr>
             {% endfor %}
             

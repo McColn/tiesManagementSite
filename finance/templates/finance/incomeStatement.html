@@ -6,6 +6,7 @@
 <style>
     .incomeStatement{
         padding: 10px 50px;
+        box-sizing: border-box;
     }
     .incomeStatement h3{
         text-align: center;
@@ -23,6 +24,9 @@
     .incomeStatement .selection div select{
         width: 350px;
         padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
     }
     .incomeStatement .selection div option{
         font-size: 16px;
@@ -33,11 +37,14 @@
         color: var(--color-white);
         background: var(--color-warning);
         border-radius: 10px;
+        border: none;
+        cursor: pointer;
     }
     .statement{
         background: var(--color-white);
         padding: 20px;
         margin: 40px 0px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     .statement .top{
         display: flex;
@@ -66,7 +73,7 @@
     }
     .centre div{
         display: grid;
-        grid-template-columns: 3fr 1fr 1fr;
+        grid-template-columns: 3fr  1fr;
     }
     .centre div#header{
         background: var(--color-primary);
@@ -81,6 +88,11 @@
         margin: 10px 10px;
         
     }
+    .centre div li#title{
+        font-weight: 800;
+        font-size: 18px;
+        color: var(--company-color-2);
+    }
     .centre div li#data{
         text-align: end;
         font-weight: 600;
@@ -92,127 +104,172 @@
     }
     div#subheader{
         margin: 30px 0px 0px 0px;
-        background: var(--color-warning-light);
+        background: var(--company-color-2);
         color: var(--color-dark);
+    }
+    form{
+        display: grid;
+        grid-template-columns: 2fr 2fr 1fr;
+        align-items: center;
+        gap: 20px;
+    }
+    form label{
+        font-size: 16px;
+        font-weight: 400;
+    }
+    form input{
+        padding: 10px;
+        width: 100%;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+    form div button{
+        background: var(--color-primary);
+        padding: 10px;
+        cursor: pointer;
+        color: var(--color-white);
+        border-radius: 5px;
+        font-size: 16px;
+        width: 100%;
+        border: none;
+    }
+    div#headTitle li{
+        font-size: 20px;
+        margin: 10px 0 1px 0;
+        font-weight: 600;
+        color: var(--company-color-1);
     }
 </style>
 
 <section class="incomeStatement">
     <h3>Income Statement (Profit and Loss Statement)</h3>
-    <div class="selection">
+
+    <form method="get" action="{% url 'incomeStatement' %}">
         <div>
-            <select name="month1">
-                <option value="">From</option>
-                <option value="January">January</option>
-                <option value="February">February</option>
-                <option value="March">March</option>
-                <option value="April">April</option>
-                <option value="May">May</option>
-                <option value="June">June</option>
-                <option value="July">July</option>
-                <option value="August">August</option>
-                <option value="September">September</option>
-                <option value="October">October</option>
-                <option value="November">November</option>
-                <option value="December">December</option>
-            </select>
+            <label for="start_date">Start Date:</label>
+            <input type="date" name="start_date" id="start_date" required>
         </div>
         <div>
-            <select name="month2">
-                <option value="">To</option>
-                <option value="January">January</option>
-                <option value="February">February</option>
-                <option value="March">March</option>
-                <option value="April">April</option>
-                <option value="May">May</option>
-                <option value="June">June</option>
-                <option value="July">July</option>
-                <option value="August">August</option>
-                <option value="September">September</option>
-                <option value="October">October</option>
-                <option value="November">November</option>
-                <option value="December">December</option>
-            </select>
+            <label for="end_date">End Date:</label>
+            <input type="date" name="end_date" id="end_date" required>
         </div>
         <div>
-            <select name="year">
-                <option value="">Year</option>
-                <!-- Replace these values with the years you need -->
-                <option value="2024">2024</option>
-                <option value="2023">2023</option>
-                <option value="2022">2022</option>
-                <option value="2021">2021</option>
-                <option value="2020">2020</option>
-                <!-- Add more years as needed -->
-            </select>
+            <button type="submit">Generate Report</button>
         </div>
-        <div>
-            <button>Filter</button>
-        </div>
-    </div>
+        
+    </form>
 
     <div class="statement">
         <div class="top">
             <img src="{% static 'app/images/logo1.png' %}" alt="">
             <div>
                 <h5>Income Statement</h5>
-                <p>For the Year Ending [Dec 31,2024]</p>
+                {% if start_date and end_date %}
+                    <p>Income Statement from {{ start_date|date:"F j, Y" }} to {{ end_date|date:"F j, Y" }}</p>
+                {% else %}
+                    <p>For the Year Ending [Dec 31,2024]</p>
+                {% endif %}
             </div>
         </div>
         <div class="centre">
             <div id="subheader">
-                <li></li>
-                <li id="data">2024</li>
-                <li id="data">2023</li>
+                <li>Description</li>
+                <li id="data">Amount</li>
             </div>
-            <div>
-                <li>Revenue</li>
-                <li id="data">13,000</li>
-                <li id="data">{{total_revenue}}</li>
+            <div id="headTitle">
+                <li>REVENUE</li>
+                <!-- <li id="data">{{total_revenue|intcomma}}</li> -->
             </div>
+            {% for i in payments %}
             <div>
-                <li>Cost of Goods Sold</li>
-                <li id="data">7,000</li>
-                <li id="data">{{total_cost_goods}}</li>
+                <li>{{i.title}} - {{i.project.title}} - {{i.project.client.clientName}}</li>
+                <li id="data">{{i.amount|intcomma}}</li>
+            </div>
+            {% endfor %}
+            <div id="line"></div>
+            <div>
+                <li>Total Services Revenue</li>
+                <li id="data">{{total_revenue|intcomma}}</li>
             </div>
             <div id="line"></div>
             <div>
-                <li>Gross Profit</li>
-                <li id="data">7,890</li>
-                <li id="data">12,445</li>
+                <li id="title">Cost of Goods Sold (COGS)</li>
+            </div>
+            <div>
+                <li>Opening balance stock</li>
+                <li id="data">{{total_cost_before_start_date|intcomma}}</li>
+            </div>
+            <div>
+                <li>Purchases</li>
+                <li id="data">{{total_project_purchases|intcomma}}</li>
+            </div>
+            <div>
+                <li>Direct cost</li>
+            <li id="data">{{total_projectDirectCost|intcomma}}</li>
+            </div>
+            <div>
+                <li>Closing stock</li>
+                <li id="data">{{closing_stock|intcomma}}</li>
+            </div>
+            <div id="line"></div>
+            <div>
+                <li>Total Cost of sales</li>
+                <li id="data">{{COGS|intcomma}}</li>
+            </div>
+            <div id="line"></div>
+            <div>
+                <li id="title">GROSS PROFIT</li>
+                <li id="data">{{gross_profit|intcomma}}</li>
             </div>
             
+            <div id="headTitle">
+                <li>EXPENSES</li>
+            </div>
 
-            <div id="subheader">
-                <li>Less Expenses</li>
-            </div>
             <div>
-                <li>Administrative Expenses</li>
-                <li id="data">7,890</li>
-                <li id="data">12,445</li>
+                <li id="title">Projects Expenses</li>
             </div>
+            {% for i in expenses %}
             <div>
-                <li>Financial Expenses</li>
-                <li id="data">7,890</li>
-                <li id="data">12,445</li>
+                <li>{{i.title}} - {{i.project.title}} - {{i.project.client.clientName}}</li>
+                <li id="data">{{i.amount|intcomma}}</li>
             </div>
+            {% endfor %}
+
             <div>
-                <li>Depreciation and Amortization</li>
-                <li id="data">7,890</li>
-                <li id="data">12,445</li>
+                <li id="title">Office Expenses</li>
+            </div>
+            {% for i in office_expenses %}
+            <div>
+                <li>{{i.title}} - {{i.category.title}}</li>
+                <li id="data">{{i.amount|intcomma}}</li>
+            </div>
+            {% endfor %}
+            <div>
+                <li id="title">Depreciation and Amortization</li>
+                <li id="data"> - </li>
             </div>
             <div id="line"></div>
             <div>
                 <li>Total Expenses</li>
-                <li id="data">7,890</li>
-                <li id="data">12,445</li>
+                <li id="data">{{sum_expenses|intcomma}}</li>
             </div>
-            <div id="header">
-                <li>Net Profit Before Tax</li>
-                <li id="data">7,890</li>
-                <li id="data">12,445</li>
+            <div id="line"></div>
+            <div id="headTitle" style="margin-top: 20px;">
+                <li>OPERATING INCOME</li>
+                <li id="data">{{operating_income|intcomma}}</li>
+            </div>
+            <div id="headTitle" style="margin-top: 20px;">
+                <li>NET PROFIT BEFORE TAX</li>
+                <li id="data">{{operating_income|intcomma}}</li>
             </div>
         </div>
+    </div>
+
+
+    <div>
+  
     </div>
     
 </section>

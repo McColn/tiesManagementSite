@@ -1,0 +1,154 @@
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
+      rel="stylesheet">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="{% static 'app/home2.css' %}">
+          <!-- Cleave.js CSS (optional, for styling) -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/addons/cleave-phone.us.css" />
+        <!-- Cleave.js JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js"></script>
+
+    
+        <style>
+            p{
+                font-size: 14px;
+                font-weight: 400;
+                color: var(--color-dark);
+            }
+            h5{
+                font-size: 18px;
+                font-weight: 700;
+                color: var(--color-dark);
+            }
+            h6{
+                font-size: 16px;
+                font-weight: 500;
+                color: var(--color-dark);
+            }
+            .letter{
+                margin: 70px 20px;
+            }
+            .line{
+                height: 50px;
+                width: 100%;
+                background: #d2cdcd;
+                margin: 20px 0px;
+            }
+            .letter .header{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .letter .header img{
+                height: 70px;
+                width: auto;
+            }
+            .letter .header .address .one{
+                display: flex;
+                justify-content: space-between;
+                gap: 20px;
+                align-items: center;
+            }
+            .letter .header .address {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+            .letter .header .address .one span{
+                background: #d2cdcd;
+                padding: 5px;
+            }
+            .letter .intro{
+                margin-top: 50px;
+            }
+            .letter h5{
+                margin: 30px 0px 15px 0px;
+            }
+            .letter h6{
+                margin: 30px 0px 0px 0px;
+            }
+            .letter button{
+                padding: 10px 20px;
+                background: #d2cdcd;
+                cursor: pointer;
+            }
+
+            /* Hide elements when printing */
+            @media print {
+                .no-print {
+                    display: none;
+                }
+            }
+        </style>
+</head>
+<body>
+    
+    <section class="letter">
+        <div class="line"></div>
+        <div class="header">
+            <img src="{% static 'app/images/logo2.png' %}" alt="ties logo">
+            <div class="address">
+                <div class="one">
+                    <div class="left">
+                        <p>+255 653 405 687</p>
+                        <p>+255 653 405 687</p>
+                    </div>
+                    <span class="material-icons-sharp">phone_paused</span>
+                </div>
+                <div class="one">
+                    <div class="left">
+                        <p>www.ties.co.tz</p>
+                        <p>info@ties.co.tz</p>
+                    </div>
+                    <span class="material-icons-sharp">language</span>
+                </div>
+                <div class="one">
+                    <div class="left">
+                        <p>Sky City Mall (7th Floor)</p>
+                        <p>Mlalakuwa St, Kinondoni - DSM</p>
+                    </div>
+                    <span class="material-icons-sharp">location_on</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="intro">
+            <h5>{{leaves_details.employee.first_name}} {{leaves_details.employee.last_name}}</h5>
+            <h6>{{leaves_details.employee.role}}</h6>
+            <p>Email: {{leaves_details.employee.email}}</p>
+            <p>Phone: {{leaves_details.employee.phone}}</p>
+        </div>
+
+        <h5>Leaves statement for - {{leaves_details.leaveType}} Category from {{leaves_details.startDate}} to {{leaves_details.endDate}}</h5>
+
+        <p>{{leaves_details.leave_reason}}</p>
+
+        
+        <h6>Dr. Wikedzi Alphonce</h6>
+        <p>Managing Director</p>
+        <p>22 June 2024</p>
+
+        <div class="line"></div>
+        <button class="no-print" onclick="printPage()">Print / Pdf</button>
+    </section>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js" integrity="sha512-GMGzUEevhWh8Tc/njS0bDpwgxdCJLQBWG3Z2Ct+JGOpVnEmjvNx6ts4v6A2XJf1HOrtOsfhv3hBKpK9kE5z8AQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{% static 'app/home.js' %}"></script>
+    <script>
+        function printPage() {
+            window.print();
+        }
+    </script>
+  
+</body>
+</html>

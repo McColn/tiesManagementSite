@@ -91,6 +91,10 @@
                     <span class="material-icons-sharp">bed</span>
                     <h4>Leaves</h4>
                 </a>
+                <a href="{% url 'salaryAdvance' %}" class="{% if request.path == '/salaryAdvance/' %}active{% endif %}">
+                    <span class="material-icons-sharp">currency_exchange</span>
+                    <h4>Salary Advance</h4>
+                </a>
                 <a href="{% url 'assignment' %}" class="{% if request.path == '/assignment/' %}active{% endif %}">
                     <span class="material-icons-sharp">assignment</span>
                     <h4>Assignments</h4>
@@ -99,6 +103,7 @@
                     <span class="material-icons-sharp">settings</span>
                     <h4>Company</h4>
                 </a>
+                
             </div>
 
             <div class="updates">

@@ -6,67 +6,108 @@
 <style>
     /* graphs */
     .transactions{}
-    .transactions .top {
-        display: grid;
-        grid-template-columns: 3fr 1fr;
-        gap: 20px;
-        background: transparent;
-    }
-    .transactions .top .card {
-        padding: 20px;
-        background: var(--color-white);
-        border-radius: 10px;
-        /* height: 320px; */
-    }
-    .transactions .top .card .header div{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .transactions .top .card .header h6{
-        font-size: 13px;
-        color: var(--color-gray-light);
-    }
-    .transactions .top .card .header .row{
-        display: flex;
-        gap: 10px;
-    }
-    .transactions .top .card .header .row .first,
-    .transactions .top .card .header .row .second {
-        display: flex;
-        gap: 5px;
-    }
-    .transactions .top .card .header .row .first div{
-        padding: 5px 10px;
-        background: var(--color-primary);
-    }
-    .transactions .top .card .header .row .second div{
-        padding: 5px 10px;
-        background: var(--color-gray-light);
-    }
-    .transactions .top .card .header .row .first div p,
-    .transactions .top .card .header .row .second div p{
-        font-size: 11px;
-        font-weight: 400;
-        color: var(--color-gray-light);
-    }
+.transactions .top {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 20px;
+    background: transparent;
+}
+.transactions .top .card {
+    padding: 20px;
+    background: var(--color-white);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 3ms ease;
+}
+.transactions .top .card .header div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.transactions .top .card .header h6{
+    font-size: 13px;
+    color: var(--color-gray-light);
+}
+.transactions .top .card .header .row{
+    display: flex;
+    gap: 10px;
+}
+.transactions .top .card .header .row .first,
+.transactions .top .card .header .row .second {
+    display: flex;
+    gap: 5px;
+}
+.transactions .top .card .header .row .first div{
+    padding: 5px 10px;
+    background: var(--color-primary);
+    border-radius: 5px;
+}
+.transactions .top .card .header .row .second div{
+    padding: 5px 10px;
+    background: var(--color-gray-light);
+    border-radius: 5px;
+}
+.transactions .top .card .header .row .first div p,
+.transactions .top .card .header .row .second div p{
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--color-gray-light);
+}
 
-    .transactions .top .comparisons{
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-    .transactions .top .comparisons .row{
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 10px;
-        background: transparent;
-    }
-    .transactions .top .comparisons .row .cat{
-        background: var(--color-white);
-        padding: 30px 20px;
-        border-radius: 0;
-    }
+.transactions .top .comparisons{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.transactions .top .comparisons .row{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    background: transparent;
+}
+.transactions .top .comparisons .row .cat{
+    background: var(--color-white);
+    padding: 30px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 3ms ease;
+}
+.transactions .top .comparisons .row .cat h6{
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-gray-light);
+}
+.transactions .top .comparisons .row .cat h5{
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--color-gray-dark);
+}
+.transactions .top .comparisons .row .cat p{
+    font-size: 12px;
+    font-weight: 200;
+    color: var(--color-gray-light);
+}
+.transactions .top .comparisons .total{
+    background: var(--color-white);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 3ms ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.transactions .top .comparisons .total h6{
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-gray-light);
+}
+.transactions .top .comparisons .total h5{
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--color-gray-dark);
+    padding: 5px 0;
+}
     .transactions .top .comparisons .row .cat h6{
         font-size: 14px;
         font-weight: 500;

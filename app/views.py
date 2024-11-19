@@ -676,6 +676,13 @@ def leaves(request):
     }
     return render(request,'app/leaves.html',context)
 
+def leavesletter(request,id):
+    leaves_details = Leaves.objects.get(id = id)
+    context = {
+        'leaves_details':leaves_details
+    }
+    return render(request, 'app/leavesletter.html',context)
+
 def leavesDetails(request,id):
     leaves_details = Leaves.objects.get(id = id)
     # Get all other leaves for the same employee, excluding the clicked leave
@@ -743,5 +750,106 @@ def calendar_view(request):
         'current_month': current_month,
     })
 
+
+
+def salaryAdvance(request):
+    # Get current date
+    today = timezone.now()
+    
+    # Get the first and last day of the current month
+    start_of_month = today.replace(day=1)
+    end_of_month = (start_of_month + timedelta(days=32)).replace(day=1) - timedelta(days=1)
+    
+    # Filter records for this month
+    this_month_records = SalaryAdvance.objects.filter(date_applied__gte=start_of_month, date_applied__lte=end_of_month).order_by('-id')
+    
+    # Filter records excluding those of this month (before start of the current month)
+    past_records = SalaryAdvance.objects.filter(date_applied__lt=start_of_month).order_by('-id')
+    
+    context = {
+        'this_month_records': this_month_records,
+        'past_records': past_records,
+    }
+    
+    return render(request, 'app/salaryAdvance.html', context)
+
+def salaryAdvanceDetails(request, id):
+    x = SalaryAdvance.objects.get(id = id)
+    context = {
+        'x':x
+    }
+    return render(request, 'app/salaryAdvanceDetails.html',context)
+
+
+def salaryAdvanceActions(request,id):
+    s = SalaryAdvance.objects.get(id=id)
+    salary_adv = SalaryAdvance.objects.get(id=id)
+    form = SalaryAdvanceActionForm(instance=s)
+    if request.method == 'POST':
+        form = SalaryAdvanceActionForm(request.POST, instance=s)
+        if form.is_valid():
+            form.save()
+            return redirect('salaryAdvanceDetails',id)
+    context = {
+        'form':form,
+        'salary_adv':salary_adv,
+        's':s,
+    }
+    return render(request, 'app/salaryAdvanceActions.html',context)
+
+
+def advanceRequest(request):
+    form = SalaryAdvanceForm()
+    if request.method == 'POST':
+        form = SalaryAdvanceForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                leave = form.save(commit=False)
+                leave.name = request.user
+                leave.save()
+                return redirect('salaryAdvance')
+            except Exception as e:
+                print(f"Error updating item: {e}")
+        else:
+            print("Form is not valid")
+    context = {
+         'form':form
+    }
+    return render(request,'app/advanceRequest.html',context)
+
 def company(request):
-    return render(request,'app/company.html')
+    employeeCode = Company.objects.filter(category='employeeCode')
+    certificate = Company.objects.filter(category='certificate')
+    secretarialReport = Company.objects.filter(category='secretarialReport')
+    other = Company.objects.filter(category='other')
+    context = {
+        'employeeCode':employeeCode,
+        'certificate':certificate,
+        'secretarialReport':secretarialReport,
+        'other':other,
+    }
+
+    return render(request,'app/company.html', context)
+
+
+def companyPdfAdd(request):
+    form = CompanyForm()
+    if request.method == 'POST':
+        form = CompanyForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                leave = form.save(commit=False)
+                leave.uploader = request.user
+                leave.save()
+                return redirect('company')
+            except Exception as e:
+                print(f"Error updating item: {e}")
+        else:
+            print("Form is not valid")
+    context = {
+         'form':form
+    }
+    return render(request,'app/advanceRequest.html',context)
+
+def salarymccoln(mccoln):
+    return render(mccoln, 'app/salarymccoln.html')

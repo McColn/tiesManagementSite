@@ -6,75 +6,86 @@
 
 <style>
     .assignment .header{
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-        background: var(--color-white);
-        padding: 20px;
-    }
-    .assignment .header #left div{
-        margin-right: 10px;
-        border: 1px solid var(--color-primary);
-        padding: 10px;
-        cursor: pointer;
-    }
-    .assignment .header div{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 10px 0px;
-    }
-    .assignment .header div h5{
-        font-weight: 600;
-        font-size: 20px;
-        color: var(--color-gray-dark);
-    }
-    .assignment .cards{
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-        margin-top: 30px;
-    }
-    .assignment .cards .card{
-        background: var(--color-white);
-        border-radius: 10px;
-        padding: 30px;
-    }
-    .assignment .cards .card h6{
-        font-size: 18px;
-        font-weight: 600;
-        color: var(--color-gray-light);
-    }
-    .assignment .cards .card .row{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 20px 0 10px 0px;
-    }
-    .assignment .cards .card .row div{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 5px;
-    }
-    .assignment .cards .card .row img{
-        height: 30px;
-        width: 30px;
-        border-radius: 50%;
-    }
-    p{
-        font-size: 14px;
-        font-weight: 400;
-    }
-    .material-icons-sharp{
-        font-size: 14px;
-        color: var(--color-gray-light);
-        font-weight: 300;
-    }
-    textarea{
-        width: 700px;
-        border: 1px solid var(--color-primary);
-    }
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    background: var(--color-white);
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.assignment .header #left div{
+    margin-right: 10px;
+    border: 1px solid var(--color-primary);
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+.assignment .header #left div:hover{
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+.assignment .header div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0px;
+}
+.assignment .header div h5{
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--color-gray-dark);
+}
+.assignment .cards{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 30px;
+}
+.assignment .cards .card{
+    background: var(--color-white);
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.assignment .cards .card h6{
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-gray-light);
+}
+.assignment .cards .card .row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0 10px 0px;
+}
+.assignment .cards .card .row div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+}
+.assignment .cards .card .row img{
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+}
+p{
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--color-gray-light);
+}
+.material-icons-sharp{
+    font-size: 14px;
+    color: var(--color-gray-light);
+    font-weight: 300;
+}
+textarea{
+    width: 700px;
+    border: 1px solid var(--color-primary);
+    padding: 10px;
+    border-radius: 5px;
+}
 
     /* add btn */
     .add{

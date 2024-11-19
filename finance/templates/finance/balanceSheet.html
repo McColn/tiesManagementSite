@@ -1,0 +1,349 @@
+{% extends 'finance/base2.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<style>
+    .incomeStatement{
+        padding: 10px 50px;
+    }
+    .incomeStatement h3{
+        text-align: center;
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--color-gray-dark);
+        margin: 10px;
+    }
+    .incomeStatement .selection{
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin: 10px;
+    }
+    .incomeStatement .selection div select{
+        width: 350px;
+        padding: 10px;
+    }
+    .incomeStatement .selection div option{
+        font-size: 16px;
+        font-weight: 600;
+    }
+    .incomeStatement .selection div button{
+        padding: 10px 30px;
+        color: var(--color-white);
+        background: var(--color-warning);
+        border-radius: 10px;
+    }
+    .statement{
+        background: var(--color-white);
+        padding: 20px;
+        margin: 40px 0px;
+    }
+    .statement .top{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .statement .top img{
+        height: 50px;
+        width: auto;
+    }
+    .statement .top div{
+        text-align: end;
+    }
+    .statement .top div h5{
+        font-size: 20px;
+        color: var(--color-primary);
+        font-weight: 800;
+    }
+    .statement .top div p{
+        font-size: 14px;
+        color: var(--color-gray-dark);
+        font-weight: 400;
+    }
+    .centre{
+        margin: 20px 0px;
+    }
+    .centre div{
+        display: grid;
+        grid-template-columns: 3fr  1fr;
+    }
+    .centre div#header{
+        background: var(--color-primary);
+        padding: 10px;
+        color: var(--color-white);
+        font-size: 18px;
+        font-weight: 600;
+    }
+    .centre div li{
+        font-size: 16px;
+        font-weight: 400;
+        margin: 10px 10px;
+        
+    }
+    .centre div li#title{
+        font-weight: 800;
+        font-size: 18px;
+        color: var(--company-color-2);
+    }
+    .centre div li#data{
+        text-align: end;
+        font-weight: 600;
+    }
+    div#line{
+        height: 1px;
+        width: 100%;
+        background: var(--color-gray-dark);
+    }
+    div#subheader{
+        margin: 30px 0px 0px 0px;
+        background: var(--company-color-2);
+        color: var(--color-dark);
+    }
+    form{
+        display: grid;
+        grid-template-columns: 2fr 2fr 1fr;
+        align-items: center;
+        gap: 20px;
+    }
+    form label{
+        font-size: 16px;
+        font-weight: 400;
+    }
+    form input{
+        padding: 10px;
+        width: 100%;
+    }
+    form div button{
+        background: var(--color-primary);
+        padding: 10px;
+        cursor: pointer;
+        color: var(--color-white);
+        border-radius: 5px;
+        font-size: 16px;
+        width: 100%;
+    }
+    div#headTitle li{
+        font-size: 20px;
+        margin: 10px 0 1px 0;
+        font-weight: 600;
+        color: var(--company-color-1);
+    }
+</style>
+
+<section class="incomeStatement">
+    <h3>Balance Sheet</h3>
+
+    <form method="get" action="{% url 'balanceSheet' %}">
+        <div>
+            <label for="start_date">Start Date:</label>
+            <input type="date" name="start_date" id="start_date" required>
+        </div>
+        <div>
+            <label for="end_date">End Date:</label>
+            <input type="date" name="end_date" id="end_date" required>
+        </div>
+        <div>
+            <button type="submit">Generate Report</button>
+        </div>
+        
+    </form>
+
+    <div class="statement">
+        <div class="top">
+            <img src="{% static 'app/images/logo1.png' %}" alt="">
+            <div>
+                <h5>Income Statement</h5>
+                {% if start_date and end_date %}
+                    <p>Income Statement from {{ start_date|date:"F j, Y" }} to {{ end_date|date:"F j, Y" }}</p>
+                {% else %}
+                    <p>For the Year Ending [Dec 31,2024]</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="centre">
+            <div id="subheader">
+                <li>Description</li>
+                <li id="data">Amount</li>
+            </div>
+            <div id="headTitle">
+                <li>ASSETS</li>
+                <!-- <li id="data">{{total_revenue|intcomma}}</li> -->
+            </div>
+            
+            <div id="line"></div>
+            <div>
+                <li id="title">Current Assets</li>
+            </div>
+            <div>
+                <li>Cash and Cash Equivalents</li>
+                <li id="data">{{total_cash|intcomma}}</li>
+            </div>
+            <div>
+                <li>Accounts Receivable</li>
+                <li id="data">{{accounts_receivable|intcomma}}</li>
+            </div>
+            <div>
+                <li>Inventory</li>
+                <li id="data">{{total_inventory|intcomma}}</li>
+            </div>
+            <div>
+                <li>Prepaid Expenses</li>
+                <li id="data">0.00</li>
+            </div>
+            <div>
+                <li>Short-Term Investments</li>
+                <li id="data">0.00</li>
+            </div>
+            <div id="line"></div>
+            <div>
+                <li>Total Current Assets</li>
+                <li id="data">{{total_current_assets|intcomma}}</li>
+            </div>
+            <div id="line"></div>
+
+
+
+            <div id="line"></div>
+            <div>
+                <li id="title">Non-Current Assets</li>
+            </div>
+            <div>
+                <li>Property, Plant & Equipment</li>
+                <li id="data">{{total_assets|intcomma}}</li>
+            </div>
+            <div>
+                <li>Intangible Assets</li>
+                <li id="data">0.00</li>
+            </div>
+            <div>
+                <li>Long-Term Investments</li>
+                <li id="data">0.00</li>
+            </div>
+            <div>
+                <li>Other Non-Current Assets</li>
+                <li id="data">0.00</li>
+            </div>
+            
+            <div id="line"></div>
+            <div>
+                <li>Total Non-Current Assets</li>
+                <li id="data">{{total_non_current_assets|intcomma}}</li>
+            </div>
+            <div id="line"></div>
+            <div id="headTitle" style="padding: 10px; background: var(--company-color-2);">
+                <li>TOTAL ASSETS</li>
+                <li id="data">{{sum_of_assets|intcomma}}</li>
+            </div>
+            
+            
+            <div id="headTitle">
+                <li>LIABILITIES</li>
+            </div>
+
+            <div>
+                <li id="title">Current Liabilities</li>
+            </div>
+            <div>
+                <li>Accounts Payable</li>
+                <li id="data">{{total_projectDirectCost|intcomma}}</li>
+            </div>
+            <div>
+                <li>Short-Term Debt</li>
+                <li id="data">{{closing_stock|intcomma}}</li>
+            </div>
+            <div>
+                <li>Accrued Expenses</li>
+                <li id="data">{{total_projectDirectCost|intcomma}}</li>
+            </div>
+            <div>
+                <li>Deferred Revenue</li>
+                <li id="data">{{closing_stock|intcomma}}</li>
+            </div>
+            <div>
+                <li>Other Current Liabilities</li>
+                <li id="data">{{closing_stock|intcomma}}</li>
+            </div>
+            <div id="line"></div>
+            <div>
+                <li>Total Current Liabilities</li>
+                <li id="data">{{sum_expenses|intcomma}}</li>
+            </div>
+            <div id="line"></div>
+
+            <div>
+                <li id="title">Non-Current Liabilities</li>
+            </div>
+            <div>
+                <li>Long-Term Debt</li>
+                <li id="data">{{total_cost_before_start_date|intcomma}}</li>
+            </div>
+            <div>
+                <li>Deferred Tax Liabilities</li>
+                <li id="data">{{total_project_purchases|intcomma}}</li>
+            </div>
+            <div>
+                <li>Other Non-Current Liabilities</li>
+                <li id="data">{{total_projectDirectCost|intcomma}}</li>
+            </div>
+            <div id="line"></div>
+            <div>
+                <li>Total Non-Current Liabilities</li>
+                <li id="data">{{COGS|intcomma}}</li>
+            </div>
+            <div id="line"></div>
+            <div id="line"></div>
+            <div>
+                <li id="title">TOTAL LIABILITIES</li>
+                <li id="data">{{gross_profit|intcomma}}</li>
+            </div>
+
+
+
+
+            <div id="headTitle">
+                <li>EQUITY</li>
+            </div>
+
+            <div>
+                <li>Common Stock</li>
+                <li id="data">{{total_projectDirectCost|intcomma}}</li>
+            </div>
+            <div>
+                <li>Additional Paid-in Capital</li>
+                <li id="data">{{closing_stock|intcomma}}</li>
+            </div>
+            <div>
+                <li>Retained Earnings</li>
+                <li id="data">{{total_projectDirectCost|intcomma}}</li>
+            </div>
+            <div>
+                <li>Other Comprehensive Income</li>
+                <li id="data">{{closing_stock|intcomma}}</li>
+            </div>
+            <div id="line"></div>
+            <div>
+                <li id="title">Total Equity</li>
+                <li id="data">{{sum_expenses|intcomma}}</li>
+            </div>
+            <div id="line"></div>
+
+            
+            <div id="line"></div>
+            <div id="line"></div>
+            <div id="headTitle" style="padding: 10px; background: var(--company-color-2);">
+                <li>TOTAL LIABILITIES & EQUITY</li>
+                <li>{{gross_profit|intcomma}}</li>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div>
+  
+    </div>
+    
+</section>
+
+{% endblock %}

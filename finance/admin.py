@@ -4,3 +4,4 @@ from .models import *
 admin.site.register(Expenses)
 admin.site.register(ExpensesCategory)
 admin.site.register(BankCard)
+admin.site.register(Assets)

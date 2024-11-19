@@ -18,6 +18,10 @@
     --color-warning-light: rgba(234,181,7,0.2);
     --color-white-light: rgba(255, 255, 255, 0.6);
 
+    --company-color-1: #1a3048;
+    --company-color-2: #9f893c;
+    --company-color-3: #ffbf00;
+
     --card-padding: 1.6rem;
     --padding-1: 1rem;
     --padding-2: 8px;
@@ -615,6 +619,29 @@ main .recent-transactions .card-details .card {
     align-items: center;
     justify-content: center;
     border-radius: var(--border-radius-2);
+}
+
+.table-data{
+    background: var(--color-white);
+    padding: 20px;
+    margin-top: 20px;
+}
+table{
+    width: 100%;
+    border: 1px solid blue;
+    margin-top: 10px;
+}
+table tr{
+    color: var(--color-white);
+}
+table tr th{
+    padding: 10px;
+    background: none;
+    color: var(--color-gray-dark);
+
+}
+table tr td{
+    padding: 5px;
 }
 
 /* MEDIA QUERIES */

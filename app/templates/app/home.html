@@ -6,59 +6,232 @@
 
 <style>
     .home{
-        display: grid;
-        grid-template-columns: 3fr 1fr;
-        gap: 10px;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 10px;
+    padding: 20px;
+}
+
+.home .left{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.home .left .projects{
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.home .left .projects h4{
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-dark);
+    padding: 10px 0px 0px 20px;
+    border-bottom: 1px solid var(--color-gray-light);
+}
+
+.home .left .projects .row{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
+    gap: 5px;
+    padding: 20px;
+}
+
+.home .left .projects .row .card{
+    background: var(--color-white);
+    border: 1px solid var(--color-primary);
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.home .left .projects .row .card h5{
+    font-size: 25px;
+    font-weight: 600;
+    color: var(--color-dark);
+}
+
+.home .left .projects .row .card h6{
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-gray-dark);
+}
+
+.home .left .projects .row .card section{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 10px;
+}
+
+.home .left .projects .row .card section p,
+.home .left .projects .row .card p{
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--color-gray-light);
+}
+
+.home .left .revenue{
+    background: var(--color-white);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.home .left .revenue h4{
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-dark);
+    padding: 10px 0px 0px 20px;
+    border-bottom: 1px solid var(--color-gray-light);
+}
+
+.home .left .revenue .numbers{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    padding: 20px;
+}
+
+.home .left .revenue .numbers div h5{
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-gray-dark);
+}
+
+.home .left .revenue .numbers div h6{
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--color-gray-dark);
+}
+
+.home .right{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.home .right .leaves{
+    background: var(--color-white);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.home .right .leaves h4{
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-dark);
+    padding: 10px 0px 0px 20px;
+    border-bottom: 1px solid var(--color-gray-light);
+}
+
+.home .right .leaves div{
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    align-items: center;
+    padding: 20px;
+}
+
+.home .right .leaves div .list{
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+}
+
+.home .right .leaves div .list div{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.home .right .leaves div .list div p{
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--color-gray-light);
+}
+
+.home .right .leaves div .list div section{
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-gray-dark);
+}
+
+.home .right .clients{
+    background: var(--color-white);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.home .right .clients h4{
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-dark);
+    padding: 10px 0px 0px 20px;
+    border-bottom: 1px solid var(--color-gray-light);
+}
+
+.home .right .clients .row{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+    padding: 20px;
+}
+
+.home .right .clients .list{
+    margin-top: 20px;
+}
+
+.home .right .clients .list h5{
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-gray-dark);
+    margin-top: 20px;
+}
+
+.home .right .clients .list table{
+    width: 100%;
+    padding: 20px;
+}
+
+.home .right .clients .list table tr{
+    padding: 2px 0px 0px 2px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px;
+}
+
+.home .right .clients .list table tr:hover{
+    background: var(--color-light);
+}
+
+.home .right .clients .list table tr th{
+    font-size: 14px;
+    text-align: start;
+}
+
+.home .right .clients .list table tr td{
+    font-size: 12px;
+    text-align: start;
+}
+
+@media screen and (max-width: 700px) {
+    .home {
+        grid-template-columns: 1fr;
     }
-    .home .left{
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-    .home .left .projects{
-        display: flex;
-        flex-direction: column;
-        background: var(--color-white);
-        border-radius: 10px;
-    }
-    .home .left .projects h4{
-        font-size: 18px;
-        font-weight: 600;
-        color: var(--color-dark);
-        padding: 10px 0px 0px 20px;
-    }
-    .home .left .projects .row{
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
-        gap: 5px;
-        padding: 0px 10px 10px 20px;
-    }
-    .home .left .projects .row .card{
-        background: var(--color-white);
-        border: 1px solid var(--color-primary);
-        border-radius: 10px;
-        padding: 10px;
-    }
-    .home .left .projects .row .card h5{
-        font-size: 25px;
-        font-weight: 600;
-        color: var(--color-dark);
-    }
-    .home .left .projects .row .card h6{
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--color-gray-dark);
-    }
-    .home .left .projects .row .card section{
-        display: grid;
+    .home .left .projects .row {
         grid-template-columns: repeat(2, 1fr);
     }
-    .home .left .projects .row .card section p,
-    .home .left .projects .row .card p{
-        font-size: 12px;
-        font-weight: 300;
-        color: var(--color-gray-light);
+    .home .left .revenue .numbers {
+        grid-template-columns: repeat(2, 1fr);
     }
+}
 
     /* Progress */
     .progress-container {
