@@ -104,7 +104,7 @@ class ProjectUpdateForm(forms.ModelForm):
     class Meta:
         model = ProjectUpdate
         fields = [
-                  'description'
+                  'description','startDate','endDate'
                   ]
         
 class AssignmentAddForm(forms.ModelForm):
@@ -157,3 +157,15 @@ class CompanyForm(forms.ModelForm):
         fields = [
                   'title','category','pdfFile'
                   ]
+        
+
+class ProjectUpdateSubTaskForm(forms.ModelForm):
+    class Meta:
+        model = ProjectUpdateSubTask
+        fields = ['title', 'startDate', 'endDate','assignee']
+    
+
+class ProjectUpdateSubTaskStatusForm(forms.ModelForm):
+    class Meta:
+        model = ProjectUpdateSubTask
+        fields = ['status'] 

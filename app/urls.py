@@ -13,6 +13,7 @@ urlpatterns = [
     path('employeesDetails/<int:id>/', views.employeesDetails, name='employeesDetails'),
     path('project/', views.project, name='project'),
     path('projectAdd/', views.projectAdd, name='projectAdd'),
+    path('projectProgress/<int:id>/', views.projectProgress, name='projectProgress'),
     path('projectEdit/<int:id>/', views.projectEdit, name='projectEdit'),
     path('projectDetails/<int:id>/', views.projectDetails, name='projectDetails'),
     path('projectInvoiceAdd/<int:project_id>/', views.projectInvoiceAdd, name='projectInvoiceAdd'),
@@ -20,6 +21,8 @@ urlpatterns = [
     path('projectExpensesAdd/<int:project_id>/', views.projectExpensesAdd, name='projectExpensesAdd'),
     path('projectBudgetAdd/<int:project_id>/', views.projectBudgetAdd, name='projectBudgetAdd'),
     path('projectRemarkAdd/<int:project_id>/', views.projectRemarkAdd, name='projectRemarkAdd'),
+     path('projectProgressSubtask/<int:project_update_id>/', views.projectProgressSubtask, name='projectProgressSubtask'),
+     path('projectProgressStatus/<int:subtask_id>/', views.projectProgressStatus, name='projectProgressStatus'),
 
     path('clients/', views.clients, name='clients'),
     path('clientDetails/<int:id>/', views.clientDetails, name='clientDetails'),

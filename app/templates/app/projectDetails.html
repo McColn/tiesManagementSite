@@ -657,18 +657,27 @@
             </div>
 
             <div class="card">
-                <div class="top1">
+                <!-- <div class="top1">
                     <h5>Remark, Project Updates</h5>
                     <div class="add" id="openModalEducation">
                         <span class="material-icons-sharp">add</span>
                     </div>
+                </div> -->
+                <div class="top1">
+                    <h5>Remark, Project Updates</h5>
+                    <a href="{% url 'projectProgress' project.id   %}">
+                        <div class="add">
+                            <p>More</p>
+                        </div>
+                    </a>
+                    
                 </div>
                 
                 {% for update in projectUpdate %}
                 <div class="remark">
                     <h6>{{update.issuedDate}}</h6>
                     <p>
-                        {{update.desription}}
+                        {{update.description}}
                     </p>
                     
                 </div>
@@ -790,7 +799,7 @@
             <div class="row2">
                 <div>
                     <label for="desription">Project Update or Remark</label>
-                    <textarea name="desription" rows="4" style="width: 600px;"></textarea>
+                    <textarea name="description" rows="4" style="width: 600px;"></textarea>
                 </div>
             </div>
             

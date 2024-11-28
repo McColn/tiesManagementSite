@@ -179,11 +179,25 @@ class ProjectDirectCost(models.Model):
     issuedDate = models.DateTimeField(auto_now_add=True)
     processor = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
 
-# project progress
+# project progress, now changed to main task per project
 class ProjectUpdate(models.Model):
     project = models.ForeignKey(Project,on_delete=models.CASCADE)
     description = models.CharField(max_length=10000, null=True, blank=True)
+    startDate = models.DateField(null=True, blank=True)
+    endDate = models.DateField(null=True, blank=True)
+    status = models.CharField(max_length=100, null=True, blank=True)
     issuedDate = models.DateTimeField(auto_now_add=True)
+
+# project progress, now changed to main task per project
+class ProjectUpdateSubTask(models.Model):
+    projectUpdate = models.ForeignKey(ProjectUpdate,on_delete=models.CASCADE)
+    title = models.CharField(max_length=10000, null=True, blank=True)
+    status = models.CharField(max_length=100, default='ongoing', null=True, blank=True)
+    assigner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='subtask_assigner')
+    assignee = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='subtask_assignee')
+    startDate = models.DateField(null=True, blank=True)
+    endDate = models.DateField(null=True, blank=True)
+
 
 # Assignment task to an employees
 class Assignment(models.Model):

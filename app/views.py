@@ -11,7 +11,6 @@ import requests
 from django.db.models import Count
 from django.db.models import Min
 
-# Create your views here.
 def home(request):
     # Get the minimum remainDuration for employee contract
     min_duration = CustomUser.objects.aggregate(Min('remainDuration'))['remainDuration__min']
@@ -125,7 +124,6 @@ def home(request):
         'assignments_due_today': assignments_due_today,
     }
     return render(request, "app/home.html", context)
-
 
 def base(request):
     return render(request,"app/base.html")
@@ -278,7 +276,6 @@ def projectDetails(request, id):
     }
     return render(request, 'app/projectDetails.html', context)
 
-
 def projectInvoiceAdd(request, project_id):
     project_list = Project.objects.all()
     project = Project.objects.get(id=project_id)
@@ -361,7 +358,6 @@ def projectExpensesAdd(request, project_id):
     }
     return render(request, "app/projectDetails.html", context)
 
-
 def projectBudgetAdd(request, project_id):
     project_list = Project.objects.all()
     project = Project.objects.get(id=project_id)
@@ -401,7 +397,7 @@ def projectRemarkAdd(request, project_id):
                 expense = form.save(commit=False)
                 expense.project = project
                 expense.save()
-                return redirect('projectDetails', id=project_id)
+                return redirect('projectProgress', id=project_id)
             except Exception as e:
                 print(f"Error updating item: {e}")
         else:
@@ -411,11 +407,11 @@ def projectRemarkAdd(request, project_id):
     
     context = {
         'form': form,
+        'project': project,
         'project_list': project_list,
         'project_id': project_id
     }
     return render(request, "app/projectDetails.html", context)
-
 
 def clients(request):
     clients = Clients.objects.all()
@@ -665,7 +661,6 @@ def assignmentDetailsAdd(request, assignment_id):
     }
     return render(request, "app/assignmentDetails.html", context)
 
-
 def leaves(request):
     leaves_list = Leaves.objects.all().order_by('-id')
     # Filter leave requests by the logged-in user
@@ -729,13 +724,10 @@ def leavesActions(request,id):
     }
     return render(request, 'app/leavesDetails.html',context)
 
-
-
 from django.contrib.auth.decorators import login_required
 @login_required
 def user_details(request):
     return render(request, 'app/user_details.html', {'user': request.user})
-
 
 def calendar_view(request):
     events = Event.objects.all()
@@ -749,8 +741,6 @@ def calendar_view(request):
         'current_year': current_year,
         'current_month': current_month,
     })
-
-
 
 def salaryAdvance(request):
     # Get current date
@@ -780,7 +770,6 @@ def salaryAdvanceDetails(request, id):
     }
     return render(request, 'app/salaryAdvanceDetails.html',context)
 
-
 def salaryAdvanceActions(request,id):
     s = SalaryAdvance.objects.get(id=id)
     salary_adv = SalaryAdvance.objects.get(id=id)
@@ -796,7 +785,6 @@ def salaryAdvanceActions(request,id):
         's':s,
     }
     return render(request, 'app/salaryAdvanceActions.html',context)
-
 
 def advanceRequest(request):
     form = SalaryAdvanceForm()
@@ -831,7 +819,6 @@ def company(request):
 
     return render(request,'app/company.html', context)
 
-
 def companyPdfAdd(request):
     form = CompanyForm()
     if request.method == 'POST':
@@ -853,3 +840,77 @@ def companyPdfAdd(request):
 
 def salarymccoln(mccoln):
     return render(mccoln, 'app/salarymccoln.html')
+
+def projectProgress(request, id):
+    # Retrieve the project using its ID
+    project = get_object_or_404(Project, id=id)
+
+    # Get all main tasks (ProjectUpdate) related to the project
+    main_task = ProjectUpdate.objects.filter(project=project)
+
+    # Get all subtasks (ProjectUpdateSubTask) related to the main tasks
+    sub_task = ProjectUpdateSubTask.objects.filter(projectUpdate__in=main_task)
+
+    context = {
+        'project': project,
+        'main_task': main_task,
+        'sub_task': sub_task,
+    }
+    return render(request, 'app/projectProgress.html', context)
+
+def projectProgressSubtask(request, project_update_id):
+    # Get the ProjectUpdate object by its id
+    project_update = get_object_or_404(ProjectUpdate, id=project_update_id)
+
+    workers = CustomUser.objects.all()
+
+    # Assuming `Project` is related to `ProjectUpdate` and has an id you want to redirect to
+    project = project_update.project  # Assuming `ProjectUpdate` has a foreign key to `Project`
+
+    if request.method == 'POST':
+        form = ProjectUpdateSubTaskForm(request.POST)
+        
+        if form.is_valid():
+            # Create a new subtask from the form data, but associate it with the current project update
+            subtask = form.save(commit=False)
+            subtask.projectUpdate = project_update  # Assign the entire ProjectUpdate object (not just the id)
+            subtask.assigner = request.user  # Assign the current user as the assignee
+            subtask.save()
+
+            # Redirect to the project progress page associated with the parent project (using Project ID)
+            
+            return redirect('projectProgress', id=project.id)
+
+    else:
+        form = ProjectUpdateSubTaskForm()
+
+    context = {
+        'form': form, 
+        'project_update': project_update,
+        'workers': workers,
+    }
+
+    return render(request, 'app/projectProgressSubtask.html', context)
+
+def projectProgressStatus(request):
+    return render(request, 'app/projectProgressStatus.html')
+
+def projectProgressStatus(request, subtask_id):
+    # Fetch the subtask object using its ID
+    subtask = get_object_or_404(ProjectUpdateSubTask, id=subtask_id)
+    
+
+    # If the request method is POST, we will handle the form submission
+    if request.method == "POST":
+        form = ProjectUpdateSubTaskStatusForm(request.POST, instance=subtask)  # Bind the form with the POST data
+
+        if form.is_valid():  # Check if the form is valid
+            form.save()  # Save the updated status to the database
+            # Redirect back to the project progress page
+            return redirect('projectProgress', id=subtask.projectUpdate.project.id)
+
+    else:
+        # If the request is GET, create an empty form instance
+        form = ProjectUpdateSubTaskStatusForm(instance=subtask)
+
+    return render(request, 'app/projectProgressStatus.html', {'form': form, 'subtask': subtask})

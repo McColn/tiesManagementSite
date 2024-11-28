@@ -1,0 +1,484 @@
+{% extends 'app/base2.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<style>
+    .projectProgress .header{
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+    }
+    .projectProgress1{
+        padding: 10px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        height: fit-content;
+    }
+    .projectProgress .subsection{
+        background: var(--color-white);
+        padding: 20px;
+        height: fit-content;
+    }
+    .projectProgress .subsection h2{
+        margin: 0px 0px 10px 0px;
+    }
+    .projectProgress .subsection .card{
+        border-left: 2px solid var(--company-color-2);
+        border-radius: 5px;
+        padding: 5px 10px;
+        margin: 10px 0px;
+    }
+    .projectProgress .subsection .card .duration{
+        font-size: 12px;
+        font-weight: 200;
+        font-style: italic;
+    }
+    .projectProgress .subsection .card .head{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .projectProgress .subsection .card h6 {
+        font-size: 14px;
+        font-weight: 600;
+        margin: 0px 0px 2px 0px;
+    }
+    .projectProgress .subsection .card .subparts{
+        margin: 0px 0px 0px 20px;
+    }
+    .projectProgress .subsection .card .subparts ul li{
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 10px;
+        align-items: center;
+        margin: 5px 0px;
+        border-radius: 5px;
+        padding: 2px;
+    }
+    .projectProgress .subsection .card .subparts ul li p{
+        font-size: 12px;
+        font-weight: 300;
+    }
+    .projectProgress .subsection .card .subparts ul li p select{
+        background: transparent;
+
+    }
+
+    .add{
+        height: 50px;
+        width: 50px;
+        border: 1px dashed var(--company-color-2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        bottom: 50px;
+        right: 30px;
+        cursor: pointer;
+    }
+    .add2{
+        height: 40px;
+        width: 40px;
+        border: 1px dashed var(--company-color-2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+    .add:hover,
+    .add2:hover{
+        background: var(--company-color-2);
+        color: var(--color-white);
+    }
+    /* Modal styles */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      transition: all 300ms ease;
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto; /* 15% from the top and centered */
+      padding: 20px;
+      border: 1px solid #888;
+      border-radius: 10px;
+      width: 50%; /* Could be more or less, depending on screen size */
+    }
+    .close,
+    .close2,
+    .close3,
+    .close4 {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus,
+    .close2:hover,
+    .close2:focus,
+    .close3:hover,
+    .close3:focus,
+    .close4:hover,
+    .close4:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* popup */
+    .info{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            padding: 20px;
+        }
+        .info h5{
+            font-size: 22px;
+            font-weight: 600;
+            text-align: center;
+            color: var(--color-gray-light);
+            margin-bottom: 10px;
+        }
+        .info form {
+            /* border: 1px dotted blue; */
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .info form .row{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 10px;
+        }
+        .info form .row div{
+            display: flex;
+            flex-direction: column;
+        }
+        .info form .row div label{
+            font-size: 15px;
+            font-weight: 400;
+            margin-bottom: 5px;
+            color: var(--color-gray-light);
+        }
+        .info form .row div input,
+        .info form .row div select
+        {
+            padding: 10px;
+            border: 1px solid #86848c;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 14px;
+            color: var(--color-gray-light);
+            width: 300px;
+        }
+        .info form button {
+            padding: 10px 30px;
+            background: var(--company-color-2);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+
+    
+</style>
+
+
+<section class="projectProgress">
+    <div class="header">
+        <h1>TSF Design in God Mwanga</h1>
+    </div>
+    
+    <div class="projectProgress1">
+        <div class="subsection">
+            <h2>Ongoing</h2>
+
+            {% for i in main_task %}
+            <div class="card">
+                <p class="duration">{{i.startDate}} - {{i.endDate}}</p>
+                <div class="head">
+                    <h6>{{i.description}}</h6>
+                    <a href="{% url 'projectProgressSubtask' i.id %}">
+                        <div class="add2">
+                            <span class="material-icons-sharp">add</span>
+                        </div>
+                    </a>
+                    
+                </div>
+                
+                <div class="subparts">
+                    <ul>
+                        <li>
+                            <p><b>Title</b></p>
+                            <p><b>Assignee</b></p>
+                            <p><b>Due date</b></p>
+                            <p><b>Status</b></p>
+                        </li>
+                        {% for sub in sub_task %}
+                        {% if sub.projectUpdate.id == i.id %}
+                        <li id="list-item" style="background: #ebe5e5;">
+                            <p>{{ sub.title }}</p>
+                            <p>{{ sub.assignee.username }}</p>
+                            <p>{{sub.startDate}} - {{sub.endDate}}</p>
+                            <a href="{% url 'projectProgressStatus' sub.id %}">
+                                <p>{{ sub.status }}</p>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+
+
+        </div>
+        <div class="subsection">
+            <h2>Todos</h2>
+            <div class="card">
+                <p class="duration">12 Jan 2024 - 16 Feb 2024</p>
+                <div class="head">
+                    <h6>Cultivation and memory updates</h6>
+                    <div class="add2" id="openModalPersonal">
+                        <span class="material-icons-sharp">add</span>
+                    </div>
+                </div>
+                <div class="subparts">
+                    <ul>
+                        <li>
+                            <p><b>Title</b></p>
+                            <p><b>Assignee</b></p>
+                            <p><b>Due date</b></p>
+                            <p><b>Status</b></p>
+                        </li>
+                        <li id="list-item" style="background: #ebe5e5;">
+                            <p>Visiting site solidarity forever in Christ</p>
+                            <p>Eng. Regan</p>
+                            <p>Jun 12 - Jun 16</p>
+                            <p>
+                              <select id="status" name="status" onchange="changeBackground()">
+                                <option value="Ongoing">Ongoing</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Paused">Paused</option>
+                              </select>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="subsection">
+            <h2>Completed</h2>
+            <div class="card">
+                <p class="duration">12 Jan 2024 - 16 Feb 2024</p>
+                <div class="head">
+                    <h6>Cultivation and memory updates</h6>
+                    <div class="add2" id="openModalPersonal">
+                        <span class="material-icons-sharp">add</span>
+                    </div>
+                </div>
+                <div class="subparts">
+                    <ul>
+                        <li>
+                            <p><b>Title</b></p>
+                            <p><b>Assignee</b></p>
+                            <p><b>Due date</b></p>
+                            <p><b>Status</b></p>
+                        </li>
+                        <li id="list-item" style="background: #ebe5e5;">
+                            <p>Visiting site solidarity forever in Christ</p>
+                            <p>Eng. Regan</p>
+                            <p>Jun 12 - Jun 16</p>
+                            <p>
+                              <select id="status" name="status" onchange="changeBackground()">
+                                <option value="Ongoing">Ongoing</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Paused">Paused</option>
+                              </select>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="add" id="openModalBasic">
+        <span class="material-icons-sharp">add</span>
+    </div>
+    
+
+
+
+        <!--Project Add -->
+<div id="basic" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      
+      <section class="info">
+        
+        <form action="{% url 'projectRemarkAdd' project.id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h5>Task Section</h5>
+            <div class="row">
+                <div>
+                    <label for="title">Title</label>
+                    <input type="text" name="description">
+                </div>
+                
+            </div>
+            
+            <div class="row">
+                <div>
+                    <label for="startDate">Start Date</label>
+                    <input type="date" name="startDate">
+                </div>
+                <div>
+                    <label for="endDate">End Date</label>
+                    <input type="date" name="endDate">
+                </div>
+            </div>
+            
+            <button type="submit">Add Task</button>
+        </form>
+      </section>
+
+    </div>
+</div>
+
+
+<!--Project Edit -->
+<div id="personal" class="modal">
+    <div class="modal-content">
+      <span class="close2">&times;</span>
+      
+      <section class="info">
+        
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h5>Add  Sub-task</h5>
+            <div class="row">
+                <div>
+                    <label for="title">Title</label>
+                    <input type="text" name="title" value="">
+                </div>
+                <div>
+                    <label for="client">Assignee</label>
+                    <select class="form-control" name="client" required>
+                        <option value=""></option>
+                        {% for x in clients %}
+                            <option value="{{ x.id }}">
+                                {{ x.clientName }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div>
+                    <label for="startDate">Start Date</label>
+                    <input type="date" name="startDate">
+                </div>
+                <div>
+                    <label for="endDate">End Date</label>
+                    <input type="date" name="endDate">
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <label for="startDate">Status</label>
+                    <select name="" id="">
+                        <option value="">-----</option>
+                        <option value="">New</option>
+                        <option value="">Ongoing</option>
+                        <option value="">Paused</option>
+                        <option value="">Complete</option>
+                    </select>
+                </div>
+                
+            </div>
+            
+            <button type="submit">Add</button>
+        </form>
+      </section>
+
+    </div>
+</div>
+
+<!--Basic info Script -->
+<script>
+    // Get the modal
+    var modal = document.getElementById("basic");
+  
+    // Get the button that opens the modal
+    var btn = document.getElementById("openModalBasic");
+  
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+  
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+  
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+</script>
+
+<!--Edit project-->
+<script>
+    // Get the modal
+    var modal2 = document.getElementById("personal");
+  
+    // Get the button that opens the modal
+    var btn2 = document.getElementById("openModalPersonal");
+  
+    // Get the <span> element that closes the modal
+    var span2 = document.getElementsByClassName("close2")[0];
+  
+    // When the user clicks the button, open the modal 
+    btn2.onclick = function() {
+      modal2.style.display = "block";
+    }
+  
+    // When the user clicks on <span> (x), close the modal
+    span2.onclick = function() {
+      modal2.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal2) {
+        modal2.style.display = "none";
+      }
+    }
+</script>
+
+</section>
+
+{% endblock %}

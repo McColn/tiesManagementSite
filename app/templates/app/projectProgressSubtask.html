@@ -1,0 +1,86 @@
+{% extends 'app/base2.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<style>
+    .subTask {
+        margin: 20px 20%;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        background: var(--color-white);
+        padding: 30px;
+        height: fit-content;
+    }
+    .subTask h2{
+        align-self: center;
+        text-transform: capitalize;
+    }
+    .subTask form .row{
+        margin: 5px 0;
+    }
+    .subTask form .row label {
+        font-size: 14px;
+    }
+    .subTask form .row textarea,
+    .subTask form .row select,
+    .subTask form .row input{
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--company-color-2);
+    }
+    .subTask form button {
+        padding: 10px 20px;
+        background: var(--company-color-2);
+        margin: 10px 0px;
+        color: var(--color-white);
+        font-size: 14px;
+    }
+
+</style>
+
+<section class="subTask">
+    <h2>{{ project_update.description }}</h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <h3>Add an Update</h3>
+        <div class="row">
+            <label for="title">Title / Update</label>
+            <textarea name="title" rows="3"></textarea>
+        </div>
+        <div class="cols">
+            <div class="row">
+                <label for="title">Start Date</label>
+                <input type="date" name="startDate">
+            </div>
+            <div class="row">
+                <label for="title">End Date</label>
+                <input type="date" name="endDate">
+            </div>
+        </div>
+        <div class="row">
+            <label for="assignee">Assign To:</label>
+            <select name="assignee" id="assignee">
+                <option value="">Select Assignee</option>
+                {% for user in workers %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <button type="submit">Submit</button>
+    </form>
+</section>
+<!-- 
+<h1>Add Subtask to Project Update</h1>
+    <h3>Project Update: {{ project_update.description }}</h3>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Subtask</button>
+    </form> -->
+
+
+{% endblock %}
