@@ -235,12 +235,16 @@
     /* MEDIA QUERY FOR MOBILE PHONE */
     @media screen and (max-width: 600px) {
         .project .top{
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr;
             margin: 0 2px 10px 2px;
         }
         .project .cards{
             grid-template-columns: 1fr;
             margin: 0 2px 0 2px;
+        }
+        .pro a{
+            grid-template-columns: 1fr;
+            gap: 30px;
         }
 
         /* popup */
@@ -288,29 +292,7 @@
         </div>
     </div>
 
-    <!-- <div class="cards">
 
-        {% for x in projects_with_performance %}
-        <div class="card">
-
-            <a href="{% url 'projectDetails' x.project.id %}">
-                <div class="left">
-                    <h5>{{x.project.title}}</h5>
-                    <h6>{{x.project.client.clientName}}</h6>
-                    <div class="progress-container">
-                        <div class="progress-bar" style=" width: {{x.performance}}%;">{{x.performance}}%</div>
-                    </div>
-                </div>
-            </a>
-            
-            <div class="right" id="openModalPersonal">
-                <span class="material-icons-sharp">edit</span>
-            </div>
-            
-        </div>
-        {% endfor %}
-        
-    </div> -->
 
     <div class="proj">
         {% for x in projects_with_performance %}

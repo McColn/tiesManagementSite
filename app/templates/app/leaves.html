@@ -42,6 +42,7 @@
     }
     .leaves .leaves-body table{
         width: 100%;
+        border-collapse: collapse;
     }
     .leaves .leaves-body table tr{
         margin-bottom: 20px;
@@ -202,12 +203,56 @@
                 display: flex;
                 flex-direction: column;
             }
+            .leaves .top div{
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
             .leaves .leaves-body table {
                 width: 100%;
-                overflow-x: scroll;
+                min-width: 600px;
             }
             .leaves .leaves-body table tr td img{
                 display: none;
+            }
+            .leaves .leaves-body{
+                overflow-x: auto;
+                width: 100%;
+            }
+            /* popup */
+            .info{
+                height: auto;
+            }
+            .info form .row{
+                grid-template-columns: 1fr;
+            }
+            .info form .row div{
+                display: flex;
+                flex-direction: column;
+            }
+            .info form button {
+                width: 100%;
+            }
+
+            .info form .row div input,
+            .info form .row div select
+            {
+                width: 100%;
+            }
+            .info form .row div textarea
+            {
+                width: 100%;
+            }
+
+            /* Modal styles */
+            
+            .modal-content {
+                width: 95%; 
+            }
+
+            /* Progress */
+            .progress-container {
+                width: 300px;
             }
         }
 </style>

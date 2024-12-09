@@ -229,6 +229,50 @@
             color: #fff;
             cursor: pointer;
         }
+
+        @media screen and (max-width: 700px) {
+            .company .top{
+                grid-template-columns: 1fr;
+            }
+            .company .card_doc{
+                grid-template-columns: 1fr;
+            }
+            /* popup */
+            .info{
+                height: auto;
+            }
+            .info form .row{
+                grid-template-columns: 1fr;
+            }
+            .info form .row div{
+                display: flex;
+                flex-direction: column;
+            }
+            .info form button {
+                width: 100%;
+            }
+
+            .info form .row div input,
+            .info form .row div select
+            {
+                width: 100%;
+            }
+            .info form .row div textarea
+            {
+                width: 100%;
+            }
+
+            /* Modal styles */
+            
+            .modal-content {
+                width: 95%; 
+            }
+
+            /* Progress */
+            .progress-container {
+                width: 300px;
+            }
+        }
     
 </style>
 

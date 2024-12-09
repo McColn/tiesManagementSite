@@ -18,56 +18,56 @@
         color: var(--color-gray-dark);
     }
     .salary{
-    margin: 30px 10px;
-    padding: 20px;
-    background: var(--color-white);
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-.salary .top{
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    padding: 20px;
-}
-.salary .top .card{
-    background: var(--color-white);
-    padding: 10px;
-    border: 1px solid var(--color-gray-light);
-    border-radius: 10px;
-}
-.salary h6{
-    margin: 30px 0px 10px 0px;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--color-gray-light);
-}
+        margin: 30px 10px;
+        padding: 20px;
+        background: var(--color-white);
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .salary .top{
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        padding: 20px;
+    }
+    .salary .top .card{
+        background: var(--color-white);
+        padding: 10px;
+        border: 1px solid var(--color-gray-light);
+        border-radius: 10px;
+    }
+    .salary h6{
+        margin: 30px 0px 10px 0px;
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--color-gray-light);
+    }
     table{
-    width: 100%;
-    background: var(--color-white);
-    border-collapse: collapse;
-}
-table tr th{
-    border: 1px solid var(--color-gray-dark);
-    text-align: start;
-    padding: 10px;
-    font-size: 14px;
-    font-weight: 600;
-}
-table tr td{
-    border: 1px solid var(--color-gray-dark);
-    text-align: start;
-    padding: 10px;
-    font-size: 16px;
-    font-weight: 300;
-    color: var(--color-gray-dark);
-}
-table tr td button{
-    padding: 10px;
-    background: var(--color-white);
-    border: none;
-    cursor: pointer;
-}
+        width: 100%;
+        background: var(--color-white);
+        border-collapse: collapse;
+    }
+    table tr th{
+        border: 1px solid var(--color-gray-dark);
+        text-align: start;
+        padding: 10px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    table tr td{
+        border: 1px solid var(--color-gray-dark);
+        text-align: start;
+        padding: 10px;
+        font-size: 16px;
+        font-weight: 300;
+        color: var(--color-gray-dark);
+    }
+    table tr td button{
+        padding: 10px;
+        background: var(--color-white);
+        border: none;
+        cursor: pointer;
+    }
 
 
 
@@ -192,6 +192,14 @@ table tr td button{
             border: none;
             color: #fff;
             cursor: pointer;
+        }
+
+        @media screen and (max-width: 700px) {
+            .salary .top{
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+                padding: 20px;
+            }
         }
 
 </style>
