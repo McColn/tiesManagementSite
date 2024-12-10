@@ -501,22 +501,15 @@
                     </div>
                     <div class="item">
                         <h5>Attachments</h5>
-                        <a href="{{employee.Attachment.url}}" download="filename.pdf" style="display: flex; align-items: center; margin-top: 10px;">
+                        <a href="{{employee.attachment.url}}" target="_blank" style="display: flex; align-items: center; margin-top: 10px;">
                             <span class="material-icons-sharp">download</span>
-                            {{employee.Attachment.url}} attachment pdf
+                            {{employee.attachment.url}} attachment pdf
                         </a>
                         <!-- <button><h6>{{employee.Attachment}}</h6></button> -->
                     </div>
-                </div>
-                <!-- <div class="row">
-                    <div class="item">
-                        <button style="background: aqua;"><h6>Renewal</h6></button> 
-                    </div>
-                    <div class="item">
-                        <button style="background: red;"><h6 style="color: white;">Terminate</h6></button> 
-                    </div>
                     
-                </div> -->
+                </div>
+                
             </div>
             
         </div>
