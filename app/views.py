@@ -230,7 +230,7 @@ def projectDetails(request, id):
     project_list = Project.objects.all()
     projectBudget = ProjectBudget.objects.filter(project_id=id).order_by('-id')
     projectExpense = ProjectExpense.objects.filter(project_id=id).order_by('-id')
-    projectUpdate = ProjectUpdate.objects.filter(project_id=id).order_by('-id')
+    projectUpdate = ProjectUpdate.objects.filter(project_id=id).order_by('-id')[:3]
     projectInvoice = ProjectInvoice.objects.filter(project_id=id).order_by('-id')
     projectPayment = ProjectPayment.objects.filter(project_id=id).order_by('-id')
     project = Project.objects.get(id=id)
@@ -752,13 +752,24 @@ def salaryAdvance(request):
     
     # Filter records for this month
     this_month_records = SalaryAdvance.objects.filter(date_applied__gte=start_of_month, date_applied__lte=end_of_month).order_by('-id')
-    
+
     # Filter records excluding those of this month (before start of the current month)
     past_records = SalaryAdvance.objects.filter(date_applied__lt=start_of_month).order_by('-id')
+
+    total_this_month = this_month_records.count()
+    overall_total = SalaryAdvance.objects.all().count()
+    pending_count = SalaryAdvance.objects.filter(status='pending').count()
+    accepted_count = SalaryAdvance.objects.filter(status='Accepted').count()
+    
+    
     
     context = {
         'this_month_records': this_month_records,
         'past_records': past_records,
+        'total_this_month': total_this_month,
+        'overall_total': overall_total,
+        'pending_count': pending_count,
+        'accepted_count': accepted_count,
     }
     
     return render(request, 'app/salaryAdvance.html', context)
@@ -855,6 +866,53 @@ def projectProgress(request, id):
         'project': project,
         'main_task': main_task,
         'sub_task': sub_task,
+    }
+    return render(request, 'app/projectProgress.html', context)
+
+def projectProgress(request, id):
+    # Retrieve the project using its ID
+    project = get_object_or_404(Project, id=id)
+
+    # Retrieve all main tasks (ProjectUpdate) related to the project
+    main_tasks = ProjectUpdate.objects.filter(project=project)
+
+    # Get all subtasks (ProjectUpdateSubTask) related to the main tasks
+    sub_task = ProjectUpdateSubTask.objects.filter(projectUpdate__in=main_tasks)
+
+    # Separate main tasks into 'completed' and 'ongoing'
+    completed_main_tasks = []
+    ongoing_main_tasks = []
+    todo_main_tasks = []
+
+    for main_task in main_tasks:
+        # Retrieve all subtasks related to the current main task
+        subtasks = ProjectUpdateSubTask.objects.filter(projectUpdate=main_task)
+
+        if subtasks.exists():
+            # Check if all subtasks have 'completed' status
+            all_completed = all(subtask.status == 'completed' for subtask in subtasks)
+
+            all_todo = all(subtask.status == 'todo' for subtask in subtasks)
+
+            # Check if at least one subtask has 'ongoing' status
+            any_ongoing = any(subtask.status == 'ongoing' for subtask in subtasks)
+
+            if all_completed:
+                completed_main_tasks.append(main_task)
+            elif any_ongoing:
+                ongoing_main_tasks.append(main_task)
+            elif all_todo:
+                todo_main_tasks.append(main_task)
+        else:
+            # If no subtasks exist, consider it as 'ongoing' by default
+            todo_main_tasks.append(main_task)
+
+    context = {
+        'project': project,
+        'sub_task':sub_task,
+        'completed_main_tasks': completed_main_tasks,
+        'ongoing_main_tasks': ongoing_main_tasks,
+        'todo_main_tasks': todo_main_tasks,
     }
     return render(request, 'app/projectProgress.html', context)
 

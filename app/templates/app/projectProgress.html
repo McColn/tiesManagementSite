@@ -245,10 +245,11 @@
     </div>
     
     <div class="projectProgress1">
+
         <div class="subsection">
             <h2>Ongoing</h2>
 
-            {% for i in main_task %}
+            {% for i in ongoing_main_tasks %}
             <div class="card">
                 <p class="duration">{{i.startDate}} - {{i.endDate}}</p>
                 <div class="head">
@@ -287,19 +288,65 @@
                 </div>
             </div>
             {% endfor %}
+        </div>
 
-
+        <div class="subsection">
+            <h2>Completed</h2>
+            {% for i in completed_main_tasks %}
+            <div class="card">
+                <p class="duration">{{i.startDate}} - {{i.endDate}}</p>
+                <div class="head">
+                    <h6>{{i.description}}</h6>
+                    <a href="{% url 'projectProgressSubtask' i.id %}">
+                        <div class="add2">
+                            <span class="material-icons-sharp">add</span>
+                        </div>
+                    </a>
+                    
+                </div>
+                
+                <div class="subparts">
+                    <ul>
+                        <li>
+                            <p><b>Title</b></p>
+                            <p><b>Assignee</b></p>
+                            <p><b>Due date</b></p>
+                            <p><b>Status</b></p>
+                        </li>
+                        {% for sub in sub_task %}
+                        {% if sub.projectUpdate.id == i.id %}
+                        <li id="list-item" style="background: #ebe5e5;">
+                            <p>{{ sub.title }}</p>
+                            <p>{{ sub.assignee.username }}</p>
+                            <p>{{sub.startDate}} - {{sub.endDate}}</p>
+                            <a href="{% url 'projectProgressStatus' sub.id %}">
+                                <p>{{ sub.status }}</p>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
         </div>
         <div class="subsection">
             <h2>Todos</h2>
+            {% for i in todo_main_tasks %}
             <div class="card">
-                <p class="duration">12 Jan 2024 - 16 Feb 2024</p>
+                <p class="duration">{{i.startDate}} - {{i.endDate}}</p>
                 <div class="head">
-                    <h6>Cultivation and memory updates</h6>
-                    <div class="add2" id="openModalPersonal">
-                        <span class="material-icons-sharp">add</span>
-                    </div>
+                    <h6>{{i.description}}</h6>
+                    <a href="{% url 'projectProgressSubtask' i.id %}">
+                        <div class="add2">
+                            <span class="material-icons-sharp">add</span>
+                        </div>
+                    </a>
+                    
                 </div>
+                
                 <div class="subparts">
                     <ul>
                         <li>
@@ -308,55 +355,24 @@
                             <p><b>Due date</b></p>
                             <p><b>Status</b></p>
                         </li>
+                        {% for sub in sub_task %}
+                        {% if sub.projectUpdate.id == i.id %}
                         <li id="list-item" style="background: #ebe5e5;">
-                            <p>Visiting site solidarity forever in Christ</p>
-                            <p>Eng. Regan</p>
-                            <p>Jun 12 - Jun 16</p>
-                            <p>
-                              <select id="status" name="status" onchange="changeBackground()">
-                                <option value="Ongoing">Ongoing</option>
-                                <option value="Completed">Completed</option>
-                                <option value="Paused">Paused</option>
-                              </select>
-                            </p>
+                            <p>{{ sub.title }}</p>
+                            <p>{{ sub.assignee.username }}</p>
+                            <p>{{sub.startDate}} - {{sub.endDate}}</p>
+                            <a href="{% url 'projectProgressStatus' sub.id %}">
+                                <p>{{ sub.status }}</p>
+                            </a>
                         </li>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        
                     </ul>
                 </div>
             </div>
-        </div>
-        <div class="subsection">
-            <h2>Completed</h2>
-            <div class="card">
-                <p class="duration">12 Jan 2024 - 16 Feb 2024</p>
-                <div class="head">
-                    <h6>Cultivation and memory updates</h6>
-                    <div class="add2" id="openModalPersonal">
-                        <span class="material-icons-sharp">add</span>
-                    </div>
-                </div>
-                <div class="subparts">
-                    <ul>
-                        <li>
-                            <p><b>Title</b></p>
-                            <p><b>Assignee</b></p>
-                            <p><b>Due date</b></p>
-                            <p><b>Status</b></p>
-                        </li>
-                        <li id="list-item" style="background: #ebe5e5;">
-                            <p>Visiting site solidarity forever in Christ</p>
-                            <p>Eng. Regan</p>
-                            <p>Jun 12 - Jun 16</p>
-                            <p>
-                              <select id="status" name="status" onchange="changeBackground()">
-                                <option value="Ongoing">Ongoing</option>
-                                <option value="Completed">Completed</option>
-                                <option value="Paused">Paused</option>
-                              </select>
-                            </p>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 

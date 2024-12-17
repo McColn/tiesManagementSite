@@ -503,7 +503,7 @@
                         <h5>Attachments</h5>
                         <a href="{{employee.attachment.url}}" target="_blank" style="display: flex; align-items: center; margin-top: 10px;">
                             <span class="material-icons-sharp">download</span>
-                            {{employee.attachment.url}} attachment pdf
+                            {{employee.username}} Contract pdf
                         </a>
                         <!-- <button><h6>{{employee.Attachment}}</h6></button> -->
                     </div>
@@ -565,7 +565,8 @@
                 </div>
                 <div>
                     <label for="birthDate">Birth Date</label>
-                    <input type="text" name="birthDate" id="date" placeholder="MM DD YYYY">
+                    <input type="date" name="birthDate" id="date" >
+                    <!-- <input type="text" name="birthDate" id="date" placeholder="MM DD YYYY"> -->
                 </div>
             </div>
             <div class="row">

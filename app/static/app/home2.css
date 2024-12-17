@@ -628,11 +628,11 @@ main .recent-transactions .card-details .card {
 }
 table{
     width: 100%;
-    border: 1px solid blue;
+    border: 1px solid var(--company-color-2);
     margin-top: 10px;
 }
 table tr{
-    color: var(--color-white);
+    color: var(--color-gray-dark);
 }
 table tr th{
     padding: 10px;
